@@ -43,4 +43,4 @@ jobs:
           push: true
           tags: razonyang/hugo:latest,razonyang/hugo:${{ needs.check.outputs.version }}
           build-args: |
-            HUGO_VERSION=${{ needs.check.outputs.version }}
+            HUGO_VERSION=v${{ needs.check.outputs.version }}
