@@ -1,5 +1,7 @@
 # Hugo Docker Image
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/razonyang/hugo)](https://hub.docker.com/r/razonyang/hugo)
+
 A Hugo docker image that contains Node, NPM, Git, Go and extended Hugo.
 
 ## Build Image
