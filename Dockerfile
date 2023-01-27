@@ -9,7 +9,7 @@ ARG GOPROXY
 # Go module proxy
 ENV GOPROXY=${GOPROXY}
 
-RUN apk add --no-cache build-base git
+RUN apk add --no-cache build-base
 
 # Install Hugo
 RUN go install -tags extended github.com/gohugoio/hugo@${HUGO_VERSION}
