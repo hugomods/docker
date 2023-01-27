@@ -1,7 +1,7 @@
 name: Check and Build Latest Image
 on:
   schedule:
-    - cron:  '0 */6 * * *'
+    - cron:  '*/30 * * * *'
   issue_comment:                                     
     types: [created]
 jobs:
