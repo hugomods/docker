@@ -1,0 +1,48 @@
+name: Check and Build Latest Image
+on:
+  schedule:
+    - cron:  '0 */6 * * *'
+  issue_comment:                                     
+    types: [created]
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.type == 'schedule' || github.event.issue.number == 3 }}
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.hugo.outputs.version }}
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - 
+        id: hugo
+        name: Fetch latest Hugo release
+        run: curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .tag_name -r | awk '{print "version="substr($1,2)}' >> $GITHUB_OUTPUT
+      - 
+        id: check
+        run: curl https://hub.docker.com/v2/namespaces/razonyang/repositories/hugo/tags/${{steps.hugo.outputs.version}} -s | jq 'has("name")' | awk '{print "exists="$1}' >> $GITHUB_OUTPUT 
+  build:
+    runs-on: ubuntu-latest
+    needs: check
+    if: ${{ ((needs.check.outputs.version != 'ull') && (needs.check.outputs.exists == 'false')) }}
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: razonyang
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: razonyang/hugo:latest,razonyang/hugo:${{ needs.check.outputs.version }}
+          build-args: |
+            HUGO_VERSION=${{ needs.check.outputs.version }}
