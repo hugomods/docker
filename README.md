@@ -1,8 +1,8 @@
 # Hugo Docker Image
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/razonyang/hugo)](https://hub.docker.com/r/razonyang/hugo)
-![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest)
-![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/razonyang/hugo)
+[![Docker Pulls](https://img.shields.io/docker/pulls/razonyang/hugo?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
+![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest?style=flat-square)
+![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/razonyang/hugo?style=flat-square)
 
 A Hugo docker image that contains Node, NPM, Git, Go and extended Hugo.
 
