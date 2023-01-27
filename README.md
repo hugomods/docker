@@ -4,7 +4,14 @@
 ![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest?style=flat-square)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/razonyang/hugo?style=flat-square)
 
-A Hugo docker image that contains Node, NPM, Git, Go and extended Hugo.
+A **up to date** Hugo docker image that contains **Node**, **NPM**, **Git**, **Go** and **extended Hugo**.
+
+There are two ways to check and build latest Hugo image.
+
+1. Waiting for the cron job (runs every 30mins).
+2. Trigger the job immediately by commenting on [the issue](https://github.com/razonyang/docker-hugo/issues/3).
+
+All available versions (tags) can be found on https://hub.docker.com/repository/docker/razonyang/hugo/tags?page=1&ordering=last_updated.
 
 ## Build Image
 
