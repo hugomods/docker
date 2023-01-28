@@ -3,6 +3,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/razonyang/hugo?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest?style=flat-square)](https://hub.docker.com/repository/docker/razonyang/hugo/tags?page=1&ordering=last_updated)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/razonyang/hugo?style=flat-square)
+[![Check and Build Latest Image](https://github.com/razonyang/docker-hugo/actions/workflows/docker.yml/badge.svg)](https://github.com/razonyang/docker-hugo/actions/workflows/docker.yml)
 
 A **up to date** Hugo docker image that contains **Node**, **NPM**, **Git**, **Go** and **extended Hugo**.
 
