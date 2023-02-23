@@ -12,6 +12,12 @@ There are two ways to check and build latest Hugo image.
 1. Waiting for the cron job (runs every 30mins).
 2. Trigger the job immediately by commenting on [the issue](https://github.com/razonyang/docker-hugo/issues/3).
 
+## Usage
+
+```sh
+$ docker pull razonyang/hugo
+```
+
 ## Build Image
 
 ```sh
