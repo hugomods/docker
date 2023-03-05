@@ -7,7 +7,7 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    if: ${{ github.event.type == 'schedule' || github.event.issue.number == 3 }}
+    if: ${{ github.event_name == 'schedule' || github.event.issue.number == 3 }}
     outputs:
       version: ${{ steps.hugo.outputs.version }}
       exists: ${{ steps.check.outputs.exists }}
