@@ -1,9 +1,8 @@
 ARG GOPROXY=
-ARG GO_VERSION=1.19
 ARG HUGO_VERSION=latest
 ARG NODE_VERSION=19
 
-FROM golang:${GO_VERSION}-alpine as golang
+FROM golang:alpine as golang
 ARG HUGO_VERSION
 ARG GOPROXY
 # Go module proxy
