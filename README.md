@@ -29,7 +29,6 @@ $ docker build \
 | Argument | Description |
 |---|---|
 | `GOPROXY` | Go module proxy.
-| `GO_VERSION` | Go version.
 | `HUGO_VERSION` | Hugo version.
 | `NODE_VERSION` | Node version.
 
