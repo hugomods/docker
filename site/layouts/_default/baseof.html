@@ -1,0 +1,9 @@
+<html>
+    <head>
+        <title>{{ .Page.Title }}</title>
+        {{ partial "get-remote" . }}
+    </head>
+    <body>
+        {{ block "main" . }}{{ end }}
+    </body>
+</html>
