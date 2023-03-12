@@ -13,21 +13,22 @@ There are two ways to check and build latest Hugo images.
 
 ## Images
 
-| Image                | Size | Extended | Go  | Node | NPM | Git | PostCSS | Autoprefixer | PostCSS PurgeCSS | RTLCSS |
-| -------------------- | :--- | :------: | :-: | :--: | :-: | :-: | :-----: | :----------: | :--------------: | :----: |
-| `latest`, `<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/latest) | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |  ❌ |  ❌ |  ❌ |
-| `base`, `base-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/base) | ✅ | ❌ |  ❌ |  ❌ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `go`, `go-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/go) | ✅ | ✅ |  ❌ |  ❌ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `node`, `node-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/node) | ✅ | ❌ |  ✅ |  ✅ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `exts`, `exts-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/exts) | ✅ | ✅ |  ✅ |  ✅ |  ✅ | ✅ | ✅ |  ✅ |  ✅ |  ✅
-| `reg`, `reg-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/latest) | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ |  ❌ |  ❌ |  ❌ |
-| `reg-base`, `reg-base-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-base) | ❌ | ❌ |  ❌ |  ❌ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `reg-go`, `reg-go-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-go) | ❌ | ✅ |  ❌ |  ❌ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `reg-node`, `reg-node-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-node) | ❌ | ❌ |  ✅ |  ✅ |  ❌ | ❌ |  ❌ |  ❌ |  ❌ |
-| `reg-exts`, `reg-exts-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-exts) | ❌ | ✅ |  ✅ |  ✅ |  ✅ | ✅ | ✅ |  ✅ |  ✅ |  ✅
+| Image                | Size | Extended | Go  | Node | NPM | Git |
+| -------------------- | :--- | :------: | :-: | :--: | :-: | :-: |
+| `latest`, `<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/latest) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `base`, `base-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/base) | ✅ | ❌ |  ❌ |  ❌ |  ❌ |
+| `go`, `go-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/go) | ✅ | ✅ |  ❌ |  ❌ |  ❌ |
+| `node`, `node-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/node) | ✅ | ❌ | ✅ | ✅ |  ✅ |
+| `exts`, `exts-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/exts) | ✅ | ✅ | ✅ | ✅ |  ✅ |
+| `reg`, `reg-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/latest) | ❌ | ✅ | ✅ | ✅ | ✅ |
+| `reg-base`, `reg-base-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-base) | ❌ | ❌ |  ❌ |  ❌ |  ❌ |
+| `reg-go`, `reg-go-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-go) | ❌ | ✅ |  ❌ |  ❌ |  ❌ |
+| `reg-node`, `reg-node-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-node) | ❌ | ❌ |  ✅ |  ✅ |  ❌ |
+| `reg-exts`, `reg-exts-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/reg-exts) | ❌ | ✅ |  ✅ |  ✅ |  ✅ |
 
 - `<version>`: the placeholder for Hugo version, i.e. `0.111.3`.
 - `reg`: represents the regular Hugo version.
+- `exts`: the `exts` includes not only the tools listed above, but also PostCSS CLI, Autoprefixer, PurgeCSS and RTLCSS.
 
 ## Usage
 
