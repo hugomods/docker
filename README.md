@@ -57,4 +57,46 @@ $ docker run -p 8080:8080 \
   razonyang/hugo \
   hugo server --bind 0.0.0.0 -p 8080
 ```
- 
+
+### Build Site
+
+The example uses Nginx as web server to serve Hugo generated static files.
+
+Firstly, create the `Dockerfile` file on your site root.
+
+```dockerfile
+###############
+# Build Stage #
+###############
+FROM razonyang/hugo:exts as builder
+# Base URL
+ARG HUGO_BASEURL=
+ENV HUGO_BASEURL=${HUGO_BASEURL}
+# Build site
+COPY . /src
+RUN hugo --minify --gc --enableGitInfo
+# Set the fallback 404 page if defaultContentLanguageInSubdir is enabled, please replace the `en` with your default language code.
+# RUN cp ./public/en/404.html ./public/404.html
+
+###############
+# Final Stage #
+###############
+FROM razonyang/hugo:nginx
+COPY --from=builder /src/public /site
+```
+
+```sh
+docker build -t user/my-site .
+```
+
+You may want to check the built image.
+
+```sh
+docker build -t user/my-site --build-arg HUGO_BASEURL=http://localhost:8080 .
+```
+
+```sh
+docker run -p 8080:80 user/my-site
+```
+
+Now the built site can be previewed on http://localhost:8080/.
