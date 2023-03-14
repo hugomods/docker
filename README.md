@@ -28,7 +28,7 @@ There are two ways to check and build latest Hugo images.
 
 - `<version>`: the placeholder for Hugo version, i.e. `0.111.3`.
 - `reg`: represents the regular Hugo version.
-- `exts`: the `exts` includes not only the tools listed above, but also Dart SASS, PostCSS CLI, Autoprefixer, PurgeCSS and RTLCSS.
+- `exts`: the `exts` includes not only the tools listed above, but also **Dart Sass Embedded**, **PostCSS CLI**, **Autoprefixer**, **PurgeCSS** and **RTLCSS**.
 
 ## Usage
 
