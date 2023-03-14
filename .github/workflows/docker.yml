@@ -47,7 +47,7 @@ jobs:
         id: release
         run: curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .tag_name -r | awk '{print "version="substr($1,2)}' >> $GITHUB_OUTPUT
         
-      - name: Check if the base image exists
+      - name: Check if the image exists
         if: steps.release.outputs.version != 'ull'
         id: check
         run: curl https://hub.docker.com/v2/namespaces/razonyang/repositories/hugo/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} -s | jq 'has("name")' | awk '{print "exists="$1}' >> $GITHUB_OUTPUT 
