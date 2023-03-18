@@ -14,32 +14,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        registry: ['', 'ghcr.io']
         version: ['', 'reg-']
         prefix: ['', 'base-', 'go-', 'node-', 'exts-']
         include:
           - version: ''
             gcc: true
             extended: true
+          - registry: ''
+            user: razonyang
+          - registry: 'ghcr.io'
+            user: ghcr.io/hugomods
           - version: ''
             prefix: ''
             dockerfile: docker/default/Dockerfile
-            tags: razonyang/hugo:latest,razonyang/hugo:{0}
+            tags: '{0}/hugo:latest,{0}/hugo:{1}'
           - version: 'reg-'
             prefix: ''
             dockerfile: docker/default/Dockerfile
-            tags: razonyang/hugo:reg,razonyang/hugo:reg-{0}
+            tags: '{0}/hugo:reg,{0}/hugo:reg-{1}'
           - prefix: base-
             dockerfile: docker/base/Dockerfile
-            tags: razonyang/hugo:{1}base,razonyang/hugo:{2}base-{0}
+            tags: '{0}/hugo:{2}base,{0}/hugo:{3}base-{1}'
           - prefix: go-
             dockerfile: docker/go/Dockerfile
-            tags: razonyang/hugo:{1}go,razonyang/hugo:{2}go-{0}
+            tags: '{0}/hugo:{2}go,{0}/hugo:{3}go-{1}'
           - prefix: node-
             dockerfile: docker/node/Dockerfile
-            tags: razonyang/hugo:{1}node,razonyang/hugo:{2}node-{0}
+            tags: '{0}/hugo:{2}node,{0}/hugo:{3}node-{1}'
           - prefix: exts-
             dockerfile: docker/exts/Dockerfile
-            tags: razonyang/hugo:{1}exts,razonyang/hugo:{2}exts-{0}
+            tags: '{0}/hugo:{2}exts,{0}/hugo:{3}exts-{1}'
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.issue.number == 3 }}
     steps:
@@ -50,8 +55,24 @@ jobs:
       - name: Check if the image exists
         if: steps.release.outputs.version != 'ull'
         id: check
-        run: curl https://hub.docker.com/v2/namespaces/razonyang/repositories/hugo/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} -s | jq 'has("name")' | awk '{print "exists="$1}' >> $GITHUB_OUTPUT 
-
+        run: |
+          if [[ -z "${{ matrix.registry }}" ]];
+          then
+            curl -s \
+              -- url https://hub.docker.com/v2/namespaces/razonyang/repositories/hugo/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} \
+              | jq 'has("name")' \
+              | awk '{print "exists="$1}' \
+              >> $GITHUB_OUTPUT;
+          else
+            curl -s \
+              --url https://ghcr.io/v2/hugomods/hugo/tags/list \
+              --header 'authorization: Bearer ${{ secrets.GHCR_TOKEN }}' \
+              --header 'content-type: application/json' \
+              | jq '.tags | index("${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }}") >= 0' \
+              | awk '{print "exists="$1}' \
+              >> $GITHUB_OUTPUT;
+          fi;
+      
       - name: Checkout repository
         if: steps.check.outputs.exists == 'false'
         uses: actions/checkout@v3
@@ -70,8 +91,9 @@ jobs:
         if: steps.check.outputs.exists == 'false'
         uses: docker/login-action@v2
         with:
-          username: razonyang
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ matrix.registry }}
+          username: ${{ matrix.registry == '' && 'razonyang' || github.actor }}
+          password: ${{ matrix.registry == '' && secrets.DOCKERHUB_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Build the Alpine image
         if: steps.check.outputs.exists == 'false'
@@ -122,7 +144,7 @@ jobs:
           push: true
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: ${{ format(matrix.tags, steps.release.outputs.version, matrix.version, matrix.version) }}
+          tags: ${{ format(matrix.tags, matrix.user, steps.release.outputs.version, matrix.version, matrix.version) }}
           build-args: |
             GCC=${{ matrix.gcc }}
           build-contexts: |
