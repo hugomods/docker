@@ -4,14 +4,21 @@
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
 [![Check and Build Latest Image](https://github.com/razonyang/docker-hugo/actions/workflows/docker.yml/badge.svg)](https://github.com/razonyang/docker-hugo/actions/workflows/docker.yml)
 
-The **up to date** Hugo docker images.
+The automated and up-to-date Hugo docker images.
 
-There are two ways to check and build latest Hugo images.
+The repo set up an automated workflow for checking and building latest Hugo images, which can be triggered by:
 
 1. Waiting for the cron job (runs every 30 min).
 2. Trigger the job immediately by commenting on [the issue](https://github.com/razonyang/docker-hugo/issues/3).
 
 ## Images
+
+The images will be pushed to both of Docker Hub and GitHub Container Register.
+
+| Container Register        | Image Name              |
+| ------------------------- | ----------------------- |
+| Docker Hub                | `razonyang/hugo`        |
+| GitHub Container Register | `ghcr.io/hugomods/hugo` |
 
 | Image                | Size | Extended | Go  | Node | NPM | Git |
 | -------------------- | :--- | :------: | :-: | :--: | :-: | :-: |
