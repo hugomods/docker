@@ -8,19 +8,21 @@ The automated and up-to-date Hugo docker images.
 
 The repo set up an automated workflow for checking and building latest Hugo images, which can be triggered by:
 
-1. Waiting for the cron job (runs every 30 min).
-2. Trigger the job immediately by commenting on [the issue](https://github.com/razonyang/docker-hugo/issues/3).
+1. Cron job (runs every 30 min).
+2. Commenting on [the issue](https://github.com/razonyang/docker-hugo/issues/3).
 
 ## Images
 
 The images will be pushed to both of Docker Hub and GitHub Container Register.
 
-| Container Register        | Image Name              |
-| ------------------------- | ----------------------- |
-| Docker Hub                | `razonyang/hugo`        |
-| GitHub Container Register | `ghcr.io/hugomods/hugo` |
+| Container Register | Image Name              |
+| ------------------ | ----------------------- |
+| Docker Hub         | `razonyang/hugo`        |
+| GitHub             | `ghcr.io/hugomods/hugo` |
 
-| Image                | Size | Extended | Go  | Node | NPM | Git |
+### Tags
+
+| Tag                  | Size | Extended | Go  | Node | NPM | Git |
 | -------------------- | :--- | :------: | :-: | :--: | :-: | :-: |
 | `latest`, `<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/latest) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `base`, `base-<version>` | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/razonyang/hugo/base) | ✅ | ❌ |  ❌ |  ❌ |  ❌ |
