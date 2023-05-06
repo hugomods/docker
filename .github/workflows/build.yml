@@ -27,7 +27,7 @@ jobs:
             gcc: true
             extended: true
           - registry: ''
-            user: razonyang
+            user: hugomods
           - registry: 'ghcr.io'
             user: ghcr.io/hugomods
           - version: ''
@@ -64,7 +64,7 @@ jobs:
           if [[ -z "${{ matrix.registry }}" ]];
           then
             curl -s \
-              -- url https://hub.docker.com/v2/namespaces/razonyang/repositories/hugo/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} \
+              -- url https://hub.docker.com/v2/namespaces/hugomods/repositories/hugo/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} \
               | jq 'has("name")' \
               | awk '{print "exists="$1}' \
               >> $GITHUB_OUTPUT;
@@ -97,7 +97,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ matrix.registry }}
-          username: ${{ matrix.registry == '' && 'razonyang' || github.actor }}
+          username: ${{ matrix.registry == '' && 'hugomods' || github.actor }}
           password: ${{ matrix.registry == '' && secrets.DOCKERHUB_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Build the Alpine image
@@ -130,7 +130,7 @@ jobs:
           load: true
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: razonyang/hugo:${{ matrix.version }}${{ matrix.prefix }}test
+          tags: hugomods/hugo:${{ matrix.version }}${{ matrix.prefix }}test
           build-args: |
             GCC=${{ matrix.gcc }}
           build-contexts: |
@@ -140,7 +140,7 @@ jobs:
       - name: Test
         if: steps.check.outputs.exists == 'false'
         run: |
-          docker run --rm -v $PWD/site:/src razonyang/hugo:${{ matrix.version }}${{ matrix.prefix }}test hugo
+          docker run --rm -v $PWD/site:/src hugomods/hugo:${{ matrix.version }}${{ matrix.prefix }}test hugo
 
       - name: Build and push
         if: steps.check.outputs.exists == 'false'

@@ -1,7 +1,7 @@
 # Hugo Docker Images
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/razonyang/hugo?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
-[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/razonyang/hugo/latest?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
-[![Build](https://github.com/razonyang/docker-hugo/actions/workflows/build.yml/badge.svg)](https://github.com/razonyang/docker-hugo/actions/workflows/build.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hugomods/hugo?style=flat-square)](https://hub.docker.com/r/hugomods/hugo)
+[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/hugomods/hugo/latest?style=flat-square)](https://hub.docker.com/r/razonyang/hugo)
+[![Build](https://github.com/hugomods/docker/actions/workflows/build.yml/badge.svg)](https://github.com/hugomods/docker/actions/workflows/build.yml)
 
 Please checkout the [documentations](https://hugomods.com/en/docs/docker/) for details.
