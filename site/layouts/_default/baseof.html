@@ -1,9 +1,10 @@
 <html>
     <head>
         <title>{{ .Page.Title }}</title>
-        {{ partial "get-remote" . }}
+        {{ partial "dart-sass" . }}
     </head>
     <body>
+        {{ partial "get-remote" . }}
         {{ block "main" . }}{{ end }}
     </body>
 </html>

@@ -1,3 +1,6 @@
 baseURL = 'http://example.org/'
 languageCode = 'en-us'
 title = 'Hugo Example Site'
+
+[security.funcs]
+getenv = ['^HUGO_', '^CI$', '^IMAGE_PREFIX$']
