@@ -1,0 +1,31 @@
+FROM golang:alpine as builder
+
+ARG HUGO_VERSION
+ARG HUGO_EXTENDED
+ARG GOPROXY
+ARG TARGETOS
+ARG TARGETARCH
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
+
+# install build tools.
+RUN apk add --no-cache gcc g++ musl-dev git
+
+WORKDIR /src
+
+# download modules.
+COPY src .
+RUN --mount=type=cache,target=/root/.cache/go-build \
+  --mount=type=cache,target=/go/pkg \
+  go mod download
+
+# build Hugo.
+COPY . .
+RUN --mount=type=cache,target=/root/.cache/go-build \
+  --mount=type=cache,target=/go/pkg \
+  if [[ -z "$HUGO_EXTENDED" ]]; \
+  then \
+    go build -ldflags="$LDFLAGS" -o /usr/bin/hugo; \
+  else \
+    go build -ldflags="$LDFLAGS" -tags extended -o /usr/bin/hugo; \
+  fi

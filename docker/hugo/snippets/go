@@ -1,0 +1,5 @@
+# copy Go from builder.
+COPY --from=builder /usr/local/go /usr/local/go
+
+# create a symbolic link for Go.
+RUN ln -s /usr/local/go/bin/go /usr/local/bin/go

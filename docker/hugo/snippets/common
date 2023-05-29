@@ -1,0 +1,15 @@
+ARG HUGO_EXTENDED=
+
+# gcc is required by extended Hugo.
+RUN if [[ -n "$HUGO_EXTENDED" ]]; then apk add --no-cache gcc; fi
+
+RUN apk add --update --no-cache ca-certificates
+
+# copy Hugo binary from builder.
+COPY --from=builder /usr/bin/hugo /usr/bin/hugo
+
+# working directory.
+WORKDIR /src
+
+# default command.
+CMD hugo env
