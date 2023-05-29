@@ -1,0 +1,6 @@
+# install Embedded Dart SASS.
+RUN apk add dart-sass-embedded --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --no-cache dart-sass-embedded
+
+# install packages.
+RUN npm i -g postcss-cli autoprefixer @fullhuman/postcss-purgecss rtlcss

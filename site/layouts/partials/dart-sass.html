@@ -1,0 +1,5 @@
+{{- if strings.Contains (getenv "IMAGE_PREFIX") "exts" }}
+  {{- $opts := dict "transpiler" "dartsass" }}
+  {{- $css := resources.Get "main.scss" | toCSS $opts }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{- end }}
