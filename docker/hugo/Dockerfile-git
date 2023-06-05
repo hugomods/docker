@@ -3,4 +3,6 @@ INCLUDE+ ./Dockerfile-builder
 
 FROM alpine
 
+INCLUDE+ ./snippets/common
+
 INCLUDE+ ./snippets/git
