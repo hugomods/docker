@@ -205,7 +205,7 @@ jobs:
           push: true
           context: docker/hugo
           # Alpine ARM64 arch does not support embedded Dart SASS.
-          platforms: ${{ matrix.prefix == 'exts-' && 'linux/amd64' || env.PLATFORMS }}
+          platforms: ${{ env.PLATFORMS }}
           file: docker/hugo/${{ matrix.dockerfile }}
           tags: ${{ format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version) }}
           cache-from: type=gha
