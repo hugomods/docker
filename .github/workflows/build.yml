@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ['', 'reg-']
-        prefix: ['', 'base-', 'go-', 'node-', 'exts-', 'git-']
+        prefix: ['', 'base-', 'go-', 'go-git-', 'node-', 'node-git-', 'exts-', 'git-']
         # Tags placeholders:
         #   0: the image owner.
         #   1: the image name.
@@ -71,6 +71,13 @@ jobs:
               {0}/{1}:{3}go-{2}
               ghcr.io/{0}/{1}:{3}go
               ghcr.io/{0}/{1}:{3}go-{2}
+          - prefix: go-git-
+            dockerfile: Dockerfile-go-git
+            tags: |
+              {0}/{1}:{3}go-git
+              {0}/{1}:{3}go-git-{2}
+              ghcr.io/{0}/{1}:{3}go-git
+              ghcr.io/{0}/{1}:{3}go-git-{2}
           - prefix: node-
             dockerfile: Dockerfile-node
             tags: |
@@ -78,6 +85,13 @@ jobs:
               {0}/{1}:{3}node-{2}
               ghcr.io/{0}/{1}:{3}node
               ghcr.io/{0}/{1}:{3}node-{2}
+          - prefix: node-git-
+            dockerfile: Dockerfile-node-git
+            tags: |
+              {0}/{1}:{3}node-git
+              {0}/{1}:{3}node-git-{2}
+              ghcr.io/{0}/{1}:{3}node-git
+              ghcr.io/{0}/{1}:{3}node-git-{2}
           - prefix: exts-
             dockerfile: Dockerfile-exts
             tags: |
@@ -183,7 +197,7 @@ jobs:
       - name: Check Git installation
         if: |
           steps.check.outputs.exists == 'false' &&
-          contains(fromJson('["", "git-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "git-", "node-git", "go-git", "exts-"]'), matrix.prefix)
         run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test git version
 
       - name: Check Go installation
