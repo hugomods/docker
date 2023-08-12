@@ -2,7 +2,7 @@ name: build
 
 on:
   schedule:
-    - cron:  '*/10 * * * *'
+    - cron:  '*/30 * * * *'
   issue_comment:                                     
     types: [created]
   workflow_dispatch:
