@@ -203,13 +203,13 @@ jobs:
       - name: Check Go installation
         if: |
           steps.check.outputs.exists == 'false' &&
-          contains(fromJson('["", "go-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "go-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test go version
 
       - name: Check Node.js and NPM installation
         if:  |
           steps.check.outputs.exists == 'false' &&
-          contains(fromJson('["", "node-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "node-", "node-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test node -v && npm version
 
       - name: Build and push
