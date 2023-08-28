@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ['', 'reg-']
-        prefix: ['', 'base-', 'go-', 'go-git-', 'node-', 'node-git-', 'exts-', 'git-']
+        prefix: ['', 'base-', 'go-', 'go-git-', 'node-', 'node-git-', 'node-lts-', 'exts-', 'git-']
         # Tags placeholders:
         #   0: the image owner.
         #   1: the image name.
