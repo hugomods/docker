@@ -126,12 +126,12 @@ jobs:
       # Checkout the main repository.
       - name: Checkout repository
         if: steps.check.outputs.exists == 'false'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Checkout the Hugo repository for building.
       - name: Checkout Hugo repository
         if: steps.check.outputs.exists == 'false'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: gohugoio/hugo
           ref: v${{ steps.release.outputs.version }}
