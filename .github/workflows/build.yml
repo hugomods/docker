@@ -154,7 +154,7 @@ jobs:
       
       - name: Set up QEMU
         if: steps.check.outputs.exists == 'false'
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: ${{ env.PLATFORMS }}
 
