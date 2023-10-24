@@ -1,0 +1,3 @@
+{{- with .GitInfo }}
+  {{- warnf "[git] %s: %s" .Hash .Subject }}
+{{- end }}
