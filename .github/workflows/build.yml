@@ -218,10 +218,12 @@ jobs:
           docker run --rm 
           -v $PWD/site:/src 
           ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test 
-          git init && 
+          /bin/sh -c "git init && 
           git add -A && 
+          git config --global user.email "support@hugomods.com" && 
+          git config --global user.name "HugoMods" && 
           git commit -m 'Test commit' && 
-          hugo --enableGitInfo
+          hugo --enableGitInfo"
 
       - name: Check Go installation
         if: |
