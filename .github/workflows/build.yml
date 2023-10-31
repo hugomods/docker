@@ -211,10 +211,14 @@ jobs:
         if: |
           steps.check.outputs.exists == 'false' &&
           contains(fromJson('["", "git-", "node-git", "go-git", "exts-"]'), matrix.prefix)
-        run: |
-          cp -r .git site/.git
-          docker run --rm -v $PWD/site:/src ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test hugo --enableGitInfo
-          rm -rf site/.git
+        run: >-
+          docker run --rm 
+          -v $PWD/site:/src 
+          ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test 
+          git init && 
+          git add -A && 
+          git commit -m 'Test commit' && 
+          hugo --enableGitInfo
 
       - name: Check Go installation
         if: |
