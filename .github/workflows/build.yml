@@ -117,11 +117,14 @@ jobs:
         if: steps.release.outputs.version != 'ull'
         id: check
         run: |
-          curl -s \
+          if [[ "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
+          then echo "exists=false"; \
+          else curl -s \
             -- url https://hub.docker.com/v2/namespaces/${{ env.IMAGE_OWNER }}/repositories/${{ env.IMAGE_NAME }}/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} \
             | jq 'has("name")' \
-            | awk '{print "exists="$1}' \
-            >> $GITHUB_OUTPUT;
+            | awk '{print "exists="$1}'; \
+          fi \
+          >> $GITHUB_OUTPUT;
 
       # Checkout the main repository.
       - name: Checkout repository
