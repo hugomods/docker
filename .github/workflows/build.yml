@@ -207,13 +207,13 @@ jobs:
       - name: Check Git installation
         if: |
           steps.check.outputs.exists == 'false' &&
-          contains(fromJson('["", "git-", "node-git", "go-git", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test git version
 
       - name: Test site build with --enableGitInfo
         if: |
           steps.check.outputs.exists == 'false' &&
-          contains(fromJson('["", "git-", "node-git", "go-git", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: >-
           docker run --rm 
           -v $PWD/site:/src 
