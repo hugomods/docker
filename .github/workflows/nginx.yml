@@ -45,13 +45,13 @@ jobs:
         with:
           load: true
           context: docker/nginx
-          tags: ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx-test
+          tags: hugomods/hugo:nginx-test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Test
         run: |
-          docker run --rm -v $PWD/site:/src ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx-test nginx -t
+          docker run --rm -v $PWD/site:/src hugomods/hugo:nginx-test nginx -t
 
       - name: Build and push
         uses: docker/build-push-action@v4
