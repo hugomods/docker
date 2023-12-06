@@ -236,6 +236,16 @@ jobs:
           steps.check.outputs.exists == 'false' &&
           contains(fromJson('["", "node-", "node-git-", "node-lts-", "exts-"]'), matrix.prefix)
         run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test node -v && npm version
+      
+      - name: Check PostCSS, PurgeCSS, Autoprefixer and RTLCSS
+        if:  |
+          steps.check.outputs.exists == 'false' &&
+          contains(fromJson('["exts-"]'), matrix.prefix)
+        run: >-
+          docker run --rm
+          -v $PWD/tests/postcss:/src 
+          ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test
+          postcss ./main.css
 
       - name: Build and push
         if: steps.check.outputs.exists == 'false'
