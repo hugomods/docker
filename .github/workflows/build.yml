@@ -189,7 +189,7 @@ jobs:
           load: true
           context: docker/hugo
           file: docker/hugo/${{ matrix.dockerfile }}
-          tags: ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test
+          tags: hugomods/hugo:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -200,7 +200,7 @@ jobs:
       - name: Test site build
         if: steps.check.outputs.exists == 'false'
         run: |
-          docker run --rm -v $PWD/site:/src ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test hugo
+          docker run --rm -v $PWD/site:/src hugomods/hugo:test hugo
         env:
           IMAGE_PREFIX: ${{ matrix.prefix }}
 
@@ -208,7 +208,7 @@ jobs:
         if: |
           steps.check.outputs.exists == 'false' &&
           contains(fromJson('["", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
-        run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test git version
+        run: docker run --rm hugomods/hugo:test git version
 
       - name: Test site build with --enableGitInfo
         if: |
@@ -217,7 +217,7 @@ jobs:
         run: >-
           docker run --rm 
           -v $PWD/site:/src 
-          ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test 
+          hugomods/hugo:test 
           /bin/sh -c "git init && 
           git add -A && 
           git config --global user.email "support@hugomods.com" && 
@@ -229,13 +229,13 @@ jobs:
         if: |
           steps.check.outputs.exists == 'false' &&
           contains(fromJson('["", "go-", "go-git-", "exts-"]'), matrix.prefix)
-        run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test go version
+        run: docker run --rm hugomods/hugo:test go version
 
       - name: Check Node.js and NPM installation
         if:  |
           steps.check.outputs.exists == 'false' &&
           contains(fromJson('["", "node-", "node-git-", "node-lts-", "exts-"]'), matrix.prefix)
-        run: docker run --rm ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test node -v && npm version
+        run: docker run --rm hugomods/hugo:test node -v && npm version
       
       - name: Check PostCSS, PurgeCSS, Autoprefixer and RTLCSS
         if:  |
@@ -244,7 +244,7 @@ jobs:
         run: >-
           docker run --rm
           -v $PWD/tests/postcss:/src 
-          ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}${{ matrix.prefix }}test
+          hugomods/hugo:test
           postcss ./main.css
 
       - name: Build and push
