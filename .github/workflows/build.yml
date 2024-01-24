@@ -7,11 +7,6 @@ on:
     types: [created]
   workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - '*'
 
 concurrency:
   group: "docker"
@@ -21,7 +16,8 @@ env:
   PLATFORMS: linux/amd64,linux/arm64
   IMAGE_OWNER: hugomods
   IMAGE_NAME: hugo
-  
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
   build-and-push-image:
     strategy:
@@ -251,7 +247,7 @@ jobs:
           postcss ./main.css
 
       - name: Build and push
-        if: ${{ steps.check.outputs.exists == 'false' && github.event_name != 'pull_request' }}
+        if: ${{ steps.check.outputs.exists == 'false' && env.BRANCH_NAME == 'main' }}
         uses: docker/build-push-action@v4
         with:
           push: true
