@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 concurrency:
   group: "docker"
@@ -248,7 +249,7 @@ jobs:
           postcss ./main.css
 
       - name: Build and push
-        if: steps.check.outputs.exists == 'false'
+        if: ${{ steps.check.outputs.exists == 'false' && github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v4
         with:
           push: true
