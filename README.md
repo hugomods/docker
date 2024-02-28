@@ -1,6 +1,6 @@
 # Hugo Docker Images
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/hugomods/hugo?style=flat-square)](https://hub.docker.com/r/hugomods/hugo)
+[![Docker Pulls](https://flat.badgen.net/docker/pulls/hugomods/hugo)](https://hub.docker.com/r/hugomods/hugo)
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/hugomods/hugo/latest?style=flat-square)](https://hub.docker.com/r/hugomods/hugo)
 [![Build](https://github.com/hugomods/docker/actions/workflows/build.yml/badge.svg)](https://github.com/hugomods/docker/actions/workflows/build.yml)
 
