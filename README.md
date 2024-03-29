@@ -6,4 +6,4 @@
 
 **Please note that we've rename the `razonyang/hugo` to `hugomods/hugo`.**
 
-Please checkout the [documentations](https://docker.hugomods.com/) for details.
+Please checkout the [documentation](https://docker.hugomods.com/) for details.
