@@ -1,0 +1,23 @@
+baseURL: 'http://example.org/'
+languageCode: en-us
+title: Hugo Example Site
+cascade:
+  - _target:
+      path: /{adoc,pandoc}
+    build:
+      list: never
+      render: never
+security:
+  funcs:
+    getenv:
+      - ^HUGO_
+      - ^CI$
+      - ^IMAGE_PREFIX$
+  exec:
+    allow:
+      - ^(dart-)?sass(-embedded)?$
+      - ^go$
+      - ^npx$
+      - ^postcss$
+      - ^asciidoctor$
+      - ^pandoc$

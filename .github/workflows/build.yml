@@ -205,6 +205,14 @@ jobs:
         env:
           IMAGE_PREFIX: ${{ matrix.prefix }}
 
+      - name: Test Extra Markdown Handlers
+        if: steps.check.outputs.exists == 'false' &&
+          contains(fromJson('["exts-"]'), matrix.prefix)
+        run: |
+          docker run --rm -v $PWD/site:/src hugomods/hugo:test hugo --config config.yaml,config-markdown-handlers.yaml
+        env:
+          IMAGE_PREFIX: ${{ matrix.prefix }}
+
       - name: Check Git installation
         if: |
           steps.check.outputs.exists == 'false' &&
