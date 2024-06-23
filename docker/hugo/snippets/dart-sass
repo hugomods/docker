@@ -1,0 +1,3 @@
+# install Embedded Dart SASS.
+RUN apk add dart-sass --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --no-cache dart-sass

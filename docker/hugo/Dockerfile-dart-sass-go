@@ -1,12 +1,10 @@
 # syntax = edrevo/dockerfile-plus
 INCLUDE+ ./Dockerfile-builder
 
-INCLUDE+ ./snippets/exts
+FROM alpine:edge
+
+INCLUDE+ ./snippets/common
 
 INCLUDE+ ./snippets/dart-sass
 
 INCLUDE+ ./snippets/go
-
-INCLUDE+ ./snippets/git
-
-INCLUDE+ ./snippets/common

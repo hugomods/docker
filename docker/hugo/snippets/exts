@@ -7,10 +7,6 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
-# install Embedded Dart SASS.
-RUN apk add dart-sass --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
-RUN apk add --no-cache dart-sass
-
 # install extra Markdown handlers
 RUN apk add --no-cache \
   asciidoctor \
