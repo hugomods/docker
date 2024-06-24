@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['', 'reg-'] # empty string and `reg-` represent extended and regular/standard version of Hugo.
+        version: ['', 'std-'] # empty string and `std-` represent extended and standard version of Hugo.
         prefix:
           - ''
           - 'base-'
@@ -47,7 +47,7 @@ jobs:
         #   0: the image owner.
         #   1: the image name.
         #   2: the Hugo version without leading v.
-        #   3: regular (reg-) or extended (empty string) indicator.
+        #   3: standard (std-) or extended (empty string) indicator.
         include:
           # Set `extended` as true while building extended version of Hugo.
           - version: ''
@@ -60,10 +60,14 @@ jobs:
               {0}/{1}:{2}
               ghcr.io/{0}/{1}:latest
               ghcr.io/{0}/{1}:{2}
-          - version: 'reg-'
+          - version: 'std-'
             prefix: ''
             dockerfile: Dockerfile
             tags: |
+              {0}/{1}:std
+              {0}/{1}:std-{2}
+              ghcr.io/{0}/{1}:std
+              ghcr.io/{0}/{1}:std-{2}
               {0}/{1}:reg
               {0}/{1}:reg-{2}
               ghcr.io/{0}/{1}:reg
@@ -179,7 +183,7 @@ jobs:
       - name: Fetch latest Hugo release
         id: release
         run: curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .tag_name -r | awk '{print "version="substr($1,2)}' >> $GITHUB_OUTPUT
-        
+
       - name: Check if the image exists
         if: steps.release.outputs.version != 'ull'
         id: check
@@ -330,7 +334,17 @@ jobs:
           context: docker/hugo
           platforms: ${{ env.PLATFORMS }}
           file: docker/hugo/${{ matrix.dockerfile }}
-          tags: ${{ format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version) }}
+          # Reserve reg* variants for backwards compatibility.
+          tags: >
+            ${{
+              (matrix.version == 'std-' && matrix.prefix != '') &&
+              format(
+                '{0}{1}',
+                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version),
+                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, 'reg-')
+              ) ||
+              format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version)
+            }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
