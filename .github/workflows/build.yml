@@ -182,10 +182,14 @@ jobs:
     steps:
       - name: Fetch latest Hugo release
         id: release
-        run: curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .tag_name -r | awk '{print "version="substr($1,2)}' >> $GITHUB_OUTPUT
+        uses: razonyang/github-action-github-latest-release@v1
+        with:
+          owner: gohugoio
+          name: hugo
+          prefix: v
 
       - name: Check if the image exists
-        if: steps.release.outputs.version != 'ull'
+        if: steps.release.outputs.version
         id: check
         run: |
           if [[ "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
