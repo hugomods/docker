@@ -231,9 +231,9 @@ jobs:
         id: ldflags
         if: steps.needs-build.outputs.build == true
         run: |
-          echo "hash=-X github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}" >> $GITHUB_OUTPUT
-          echo "builddate=-X github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}" >> $GITHUB_OUTPUT
-          echo "vendor=-X github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods" >> $GITHUB_OUTPUT
+          echo "hash=-X 'github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}'" >> $GITHUB_OUTPUT
+          echo "builddate=-X 'github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}'" >> $GITHUB_OUTPUT
+          echo "vendor=-X 'github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods'" >> $GITHUB_OUTPUT
       
       - name: Set up QEMU
         if: steps.needs-build.outputs.build == true
@@ -258,7 +258,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            LDFLAGS="${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}"
+            LDFLAGS=${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
 
@@ -381,6 +381,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            LDFLAGS="${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}"
+            LDFLAGS=${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
