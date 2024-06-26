@@ -188,27 +188,32 @@ jobs:
           name: hugo
           prefix: v
 
-      - name: Check if the image exists
+      - name: Check if the image tag exists
         if: steps.release.outputs.version
-        id: check
+        id: check-image-tag
+        uses: razonyang/github-action-docker-image-tag-exists@v1
+        with:
+          owner: ${{ env.IMAGE_OWNER }}
+          name: ${{ env.IMAGE_NAME }}
+          tag: ${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }}
+
+      # The `build` is `true` on when the image tag doesn't exist or the commit message contains the word `[build]`.
+      - id: needs-build
         run: |
-          if [[ "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
-          then echo "exists=false"; \
-          else curl -s \
-            -- url https://hub.docker.com/v2/namespaces/${{ env.IMAGE_OWNER }}/repositories/${{ env.IMAGE_NAME }}/tags/${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }} \
-            | jq 'has("name")' \
-            | awk '{print "exists="$1}'; \
+          if [[ ${{ steps.check-image-tag.outputs.exists }} == 0 || "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
+          then echo "build=1"; \
+          else echo "build=0"; \
           fi \
           >> $GITHUB_OUTPUT;
 
       # Checkout the main repository.
       - name: Checkout repository
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: actions/checkout@v4
 
       # Checkout the Hugo repository for building.
       - name: Checkout Hugo repository
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: actions/checkout@v4
         with:
           repository: gohugoio/hugo
@@ -217,40 +222,40 @@ jobs:
 
       - name: Build meta
         id: build_meta
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         run: |
           echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
           cd ./docker/hugo/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: LDFLAGS
         id: ldflags
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         run: |
           echo "hash=-X github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}" >> $GITHUB_OUTPUT
           echo "builddate=-X github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}" >> $GITHUB_OUTPUT
           echo "vendor=-X github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods" >> $GITHUB_OUTPUT
       
       - name: Set up QEMU
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: docker/setup-qemu-action@v3
         with:
           platforms: ${{ env.PLATFORMS }}
 
       - name: Set up Docker Buildx
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: docker/setup-buildx-action@v3
         with:
           platforms: ${{ env.PLATFORMS }}
 
       - name: Login to Docker Hub
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: docker/login-action@v3
         with:
           username: ${{ env.IMAGE_OWNER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Login to GitHub Container Registry
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -258,7 +263,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and export to Docker
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         uses: docker/build-push-action@v5
         with:
           load: true
@@ -273,14 +278,14 @@ jobs:
             HUGO_EXTENDED=${{ matrix.extended }}
 
       - name: Test site build
-        if: steps.check.outputs.exists == 'false'
+        if: steps.needs-build.outputs.build == true
         run: |
           docker run --rm -v $PWD/site:/src hugomods/hugo:test hugo
         env:
           IMAGE_PREFIX: ${{ matrix.prefix }}
 
       - name: Test Extra Markdown Handlers
-        if: steps.check.outputs.exists == 'false' &&
+        if: steps.needs-build.outputs.build == true &&
           contains(fromJson('["exts-"]'), matrix.prefix)
         run: |
           docker run --rm -v $PWD/site:/src hugomods/hugo:test hugo --config config.yaml,config-markdown-handlers.yaml
@@ -289,13 +294,13 @@ jobs:
 
       - name: Check Git installation
         if: |
-          steps.check.outputs.exists == 'false' &&
+          steps.needs-build.outputs.build == true &&
           contains(fromJson('["", "dart-sass", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm hugomods/hugo:test git version
 
       - name: Test site build with --enableGitInfo
         if: |
-          steps.check.outputs.exists == 'false' &&
+          steps.needs-build.outputs.build == true &&
           contains(fromJson('["", "dart-sass", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: >-
           docker run --rm 
@@ -310,19 +315,19 @@ jobs:
 
       - name: Check Go installation
         if: |
-          steps.check.outputs.exists == 'false' &&
+          steps.needs-build.outputs.build == true &&
           contains(fromJson('["", "dart-sass", "dart-sass-go", "dart-sass-go-git", "go-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm hugomods/hugo:test go version
 
       - name: Check Node.js and NPM installation
         if:  |
-          steps.check.outputs.exists == 'false' &&
+          steps.needs-build.outputs.build == true &&
           contains(fromJson('["", "dart-sass", "dart-sass-node", "dart-sass-node-git", "node-", "node-git-", "node-lts-", "exts-"]'), matrix.prefix)
         run: docker run --rm hugomods/hugo:test node -v && npm version
       
       - name: Check PostCSS, PurgeCSS, Autoprefixer and RTLCSS
         if:  |
-          steps.check.outputs.exists == 'false' &&
+          steps.needs-build.outputs.build == true &&
           contains(fromJson('["exts-"]'), matrix.prefix)
         run: >-
           docker run --rm
@@ -331,7 +336,7 @@ jobs:
           postcss ./main.css
 
       - name: Build and push
-        if: ${{ steps.check.outputs.exists == 'false' && env.BRANCH_NAME == 'main' }}
+        if: ${{ steps.needs-build.outputs.build == true && env.BRANCH_NAME == 'main' }}
         uses: docker/build-push-action@v5
         with:
           push: true
