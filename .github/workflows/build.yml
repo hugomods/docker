@@ -264,7 +264,7 @@ jobs:
 
       - name: Build and export to Docker
         if: steps.needs-build.outputs.build == true
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           load: true
           context: docker/hugo
@@ -337,7 +337,7 @@ jobs:
 
       - name: Build and push
         if: ${{ steps.needs-build.outputs.build == true && env.BRANCH_NAME == 'main' }}
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           context: docker/hugo

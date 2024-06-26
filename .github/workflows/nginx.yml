@@ -41,7 +41,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and export to Docker
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           load: true
           context: docker/nginx
@@ -54,7 +54,7 @@ jobs:
           docker run --rm -v $PWD/site:/src hugomods/hugo:nginx-test nginx -t
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           context: docker/nginx
