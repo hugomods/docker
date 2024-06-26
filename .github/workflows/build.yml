@@ -199,6 +199,7 @@ jobs:
 
       # The `build` is `true` on when the image tag doesn't exist or the commit message contains the word `[build]`.
       - id: needs-build
+        name: Check if there is a need to build images.
         run: |
           if [[ ${{ steps.check-image-tag.outputs.exists }} == 0 || "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
           then echo "build=1"; \
@@ -262,8 +263,8 @@ jobs:
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
 
-      # Save Hugo version for subsequent tests.
       - id: hugo-version
+        name: Save Hugo version for subsequent tests.
         if: steps.needs-build.outputs.build == true
         run: echo "version=$(docker run --rm hugomods/hugo:test hugo version)" >> $GITHUB_OUTPUT
       
