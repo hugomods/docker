@@ -3,6 +3,6 @@ INCLUDE+ ./Dockerfile-builder
 
 FROM alpine:edge
 
-INCLUDE+ ./snippets/common
-
 INCLUDE+ ./snippets/dart-sass
+
+INCLUDE+ ./snippets/common

@@ -1,3 +1,4 @@
+# this code snippet MUST be placed at the end of Dockerfile.
 ARG HUGO_EXTENDED=
 
 # libc6-compat & libstdc++ are required for extended SASS libraries
@@ -9,7 +10,15 @@ RUN apk add --update --no-cache ca-certificates
 COPY --from=builder /usr/bin/hugo /usr/bin/hugo
 
 # working directory.
+RUN mkdir /src
 WORKDIR /src
+
+# create non-root user
+RUN deluser --remove-home node || true
+RUN addgroup -g 1000 hugo \
+  && adduser -u 1000 -G hugo -s /bin/sh -D hugo
+RUN chown -R hugo:hugo /src
+USER hugo:hugo
 
 # default command.
 CMD hugo env

@@ -263,6 +263,16 @@ jobs:
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
 
+      - name: Check container user
+        if: steps.needs-build.outputs.build == true
+        run: |
+          WHOAMI=$(docker run --rm hugomods/hugo:test whoami)
+          echo $WHOAMI
+          if [[ "$WHOAMI" != "hugo" ]]
+          then
+            echo "Expected user "hugo", got "$WHOAMI"." && exit 1;
+          fi
+
       - id: hugo-version
         name: Save Hugo version for subsequent tests.
         if: steps.needs-build.outputs.build == true
