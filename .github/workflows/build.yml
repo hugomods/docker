@@ -277,6 +277,30 @@ jobs:
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
 
+      # Save Hugo version for subsequent tests.
+      - id: hugo-version
+        if: steps.needs-build.outputs.build == true
+        run: echo "version=$(docker run --rm hugomods/hugo:test hugo version)" >> $GITHUB_OUTPUT
+      
+      - name: Check Hugo version
+        if: steps.needs-build.outputs.build == true
+        run: |
+          if [[ "${{ steps.hugo-version.outputs.version }}" != *"v${{ steps.release.outputs.version }}"* ]];
+          then
+            echo "Expected Hugo version "v${{ steps.release.outputs.version }}", but got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
+          fi
+
+      - name: Check Hugo editions
+        if: steps.needs-build.outputs.build == true
+        run: |
+          if [[ "${{ matrix.version }}" == "std-" && "${{ steps.hugo-version.outputs.version }}" == *"extended"* ]];
+          then
+            echo "Expected standard edition of Hugo, got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
+          elif [[ "${{ matrix.version }}" == "" && "${{ steps.hugo-version.outputs.version }}" != *"extended"* ]]
+          then
+            echo "Expected extended edition of Hugo, got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
+          fi
+
       - name: Test site build
         if: steps.needs-build.outputs.build == true
         run: |
