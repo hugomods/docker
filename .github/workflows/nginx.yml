@@ -12,6 +12,7 @@ env:
   PLATFORMS: linux/amd64,linux/arm64
   IMAGE_OWNER: hugomods
   IMAGE_NAME: hugo
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build-and-push-image:
