@@ -95,7 +95,9 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx
+            ${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx-${{ steps.latest-tag.outputs.name }}
             ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx
+            ghcr.io/${{ env.IMAGE_OWNER }}/${{ env.IMAGE_NAME }}:nginx-${{ steps.latest-tag.outputs.name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
