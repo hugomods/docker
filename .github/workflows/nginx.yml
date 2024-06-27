@@ -3,7 +3,8 @@ name: build Nginx image
 on:
   push:
     paths:
-      - 'docker/nginx/**'
+      - '.github/workflows/nginx.yml'
+      - 'docker/nginx/**/*'
   schedule:
     - cron:  '0 0 * * *'
   workflow_dispatch:

@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - '.github/workflows/build.yml'
       - 'docker/hugo/**'
 
 concurrency:
