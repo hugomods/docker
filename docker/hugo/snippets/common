@@ -9,7 +9,7 @@ RUN apk add --update --no-cache ca-certificates
 COPY --from=builder /usr/bin/hugo /usr/bin/hugo
 
 # copy command aliases
-COPY ./bin /usr/local/bin
+COPY ./bin /usr/bin
 
 # working directory.
 WORKDIR /src

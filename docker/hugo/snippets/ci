@@ -1,0 +1,12 @@
+# install extra tools.
+RUN apk add --no-cache build-base \
+  make \
+  ruby-dev \
+  curl \
+  jq
+
+# install html-proofer
+RUN gem install html-proofer --bindir /usr/local/bin
+
+# clean up
+# RUN apk --purge del build-base make ruby-dev

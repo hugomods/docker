@@ -1,0 +1,14 @@
+# syntax = edrevo/dockerfile-plus
+INCLUDE+ ./Dockerfile-builder
+
+INCLUDE+ ./snippets/exts
+
+INCLUDE+ ./snippets/dart-sass
+
+INCLUDE+ ./snippets/go
+
+INCLUDE+ ./snippets/git
+
+INCLUDE+ ./snippets/ci
+
+INCLUDE+ ./snippets/common
