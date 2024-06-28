@@ -336,14 +336,14 @@ jobs:
       - name: Check Go installation
         if: |
           steps.needs-build.outputs.build == true &&
-          contains(fromJson('["", "dart-sass", "dart-sass-go", "dart-sass-go-git", "go-", "go-git-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "dart-sass-", "dart-sass-go-", "dart-sass-go-git-", "go-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm hugomods/hugo:test go version
 
-      - name: Check Node.js and NPM installation
+      - name: Check Node.js, NPM and Yarn installation
         if:  |
           steps.needs-build.outputs.build == true &&
-          contains(fromJson('["", "dart-sass", "dart-sass-node", "dart-sass-node-git", "node-", "node-git-", "node-lts-", "exts-"]'), matrix.prefix)
-        run: docker run --rm hugomods/hugo:test node -v && npm version
+          contains(fromJson('["", "dart-sass-", "dart-sass-node-", "dart-sass-node-git-", "node-", "node-git-", "node-lts-", "exts-"]'), matrix.prefix)
+        run: docker run --rm hugomods/hugo:test node -v && npm version && yarn -v
       
       - name: Check PostCSS, PurgeCSS, Autoprefixer and RTLCSS
         if:  |
