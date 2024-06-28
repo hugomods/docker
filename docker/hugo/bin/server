@@ -1,0 +1,13 @@
+#!/bin/sh
+for var in "$@"
+do
+  if [[ "$var" == "--bind"* ]]
+  then
+    HUGO_SERVER_BIND=1
+    break
+  fi
+done
+if [[ -z $HUGO_SERVER_BIND ]]
+then hugo server "$@" --bind 0.0.0.0
+else hugo server "$@"
+fi

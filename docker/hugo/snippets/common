@@ -8,6 +8,9 @@ RUN apk add --update --no-cache ca-certificates
 # copy Hugo binary from builder.
 COPY --from=builder /usr/bin/hugo /usr/bin/hugo
 
+# copy command aliases
+COPY ./bin /usr/local/bin
+
 # working directory.
 WORKDIR /src
 
