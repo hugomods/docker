@@ -12,7 +12,7 @@ security:
     getenv:
       - ^HUGO_
       - ^CI$
-      - ^IMAGE_PREFIX$
+      - ^IMAGE_VARIANT$
   exec:
     allow:
       - ^(dart-)?sass(-embedded)?$
