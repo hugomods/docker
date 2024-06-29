@@ -306,13 +306,13 @@ jobs:
       - name: Check Git installation
         if: |
           steps.needs-build.outputs.build == true &&
-          contains(fromJson('["", "dart-sass", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "dart-sass-", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: docker run --rm hugomods/hugo:test git version
 
       - name: Test site build with --enableGitInfo
         if: |
           steps.needs-build.outputs.build == true &&
-          contains(fromJson('["", "dart-sass", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
+          contains(fromJson('["", "dart-sass-", "dart-sass-git-", "dart-sass-go-git-", "dart-sass-node-git-", "git-", "node-git-", "go-git-", "exts-"]'), matrix.prefix)
         run: >-
           docker run --rm 
           -v $PWD/site:/src 
