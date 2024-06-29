@@ -367,10 +367,12 @@ jobs:
         if:  |
           steps.needs-build.outputs.build == true &&
           contains(fromJson('["ci-"]'), matrix.prefix)
-        run: |
-          curl --version
-          jq --version
-          htmlproofer -v
+        run: >-
+          docker run --rm
+          hugomods/hugo:test
+          sh -c "curl --version &&
+          jq --version &&
+          htmlproofer -v"
 
       - name: Login to Docker Hub
         if: ${{ steps.needs-build.outputs.build == true && env.BRANCH_NAME == 'main' }}
