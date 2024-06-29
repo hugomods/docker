@@ -1,4 +1,4 @@
-{{- if or (strings.Contains (getenv "IMAGE_PREFIX") "exts") (strings.Contains (getenv "IMAGE_PREFIX") "dart-sass") }}
+{{- if or (strings.Contains (getenv "IMAGE_PREFIX") "exts") (strings.Contains (getenv "IMAGE_PREFIX") "dart-sass") (strings.Contains (getenv "IMAGE_PREFIX") "ci") }}
   {{- $opts := dict "transpiler" "dartsass" }}
   {{- $css := resources.Get "main.scss" | toCSS $opts }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}">
