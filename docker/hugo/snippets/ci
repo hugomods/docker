@@ -9,4 +9,4 @@ RUN apk add --no-cache build-base \
 RUN gem install html-proofer --bindir /usr/local/bin
 
 # clean up
-# RUN apk --purge del build-base make ruby-dev
+# RUN apk --purge del build-base make
