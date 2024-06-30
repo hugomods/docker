@@ -242,9 +242,11 @@ jobs:
         id: ldflags
         if: steps.needs-build.outputs.build == true
         run: |
-          echo "hash=-X 'github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}'" >> $GITHUB_OUTPUT
-          echo "builddate=-X 'github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}'" >> $GITHUB_OUTPUT
-          echo "vendor=-X 'github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods'" >> $GITHUB_OUTPUT
+          HASH='github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}'
+          BUILD_DATE='github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}'
+          VENDOR='github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods'
+          echo "-X '$HASH' -X '$BUILD_DATE' -X '$VENDOR'"
+          echo "flags=-X '$HASH' -X '$BUILD_DATE' -X '$VENDOR'">> $GITHUB_OUTPUT
       
       - name: Set up QEMU
         if: steps.needs-build.outputs.build == true
@@ -269,7 +271,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            LDFLAGS=${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}
+            LDFLAGS=${{ steps.ldflags.outputs.flags }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
 
@@ -295,6 +297,14 @@ jobs:
           elif [[ "${{ matrix.version }}" == "" && "${{ steps.hugo-version.outputs.version }}" != *"extended"* ]]
           then
             echo "Expected extended edition of Hugo, got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
+          fi
+
+      - name: Check Vendor Info
+        if: steps.needs-build.outputs.build == true
+        run: |
+          if [[ "${{ steps.hugo-version.outputs.version }}" != *"VendorInfo=hugomods"* ]];
+          then
+            echo "Expected vendor "hugomods", got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
           fi
 
       - name: Test site build
@@ -412,6 +422,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            LDFLAGS=${{ steps.ldflags.outputs.hash }} ${{ steps.ldflags.outputs.builddate }} ${{ steps.ldflags.outputs.vendor }}
+            LDFLAGS=${{ steps.ldflags.outputs.flags }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
             HUGO_EXTENDED=${{ matrix.extended }}
