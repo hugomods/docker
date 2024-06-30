@@ -208,6 +208,7 @@ jobs:
 
       # The `build` is `true` on when the image tag doesn't exist or the commit message contains the word `[build]`.
       - id: needs-build
+        if: steps.release.outputs.version
         name: Check if there is a need to build images.
         run: |
           if [[ ${{ steps.check-image-tag.outputs.exists }} == 0 || "${{ github.event.head_commit.message }}" == *"[build]"* ]]; \
