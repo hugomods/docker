@@ -288,7 +288,7 @@ jobs:
             echo "Expected Hugo version "v${{ steps.release.outputs.version }}", but got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
           fi
 
-      - name: Check Hugo editions
+      - name: Check Hugo edition
         if: steps.needs-build.outputs.build == true
         run: |
           if [[ "${{ matrix.version }}" == "std-" && "${{ steps.hugo-version.outputs.version }}" == *"extended"* ]];
