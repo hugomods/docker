@@ -21,3 +21,4 @@ security:
       - ^postcss$
       - ^asciidoctor$
       - ^pandoc$
+      - ^git$
