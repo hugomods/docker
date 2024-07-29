@@ -5,6 +5,6 @@
 [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/hugomods/hugo/latest?style=flat-square)](https://hub.docker.com/r/hugomods/hugo)
 [![Build](https://github.com/hugomods/docker/actions/workflows/build.yml/badge.svg)](https://github.com/hugomods/docker/actions/workflows/build.yml)
 
-**Please note that we've rename the `razonyang/hugo` to `hugomods/hugo`.**
+**Please note that we've rename the `razonyang/hugo` to `hugomods/hugo`, the former won't be got updated anymore.**
 
 Please checkout the [documentation](https://docker.hugomods.com/) for details.
