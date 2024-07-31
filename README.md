@@ -1,4 +1,4 @@
-# Hugo Docker Images
+# Third Party Hugo Docker Images
 
 [![Docker Pulls](https://flat.badgen.net/docker/pulls/hugomods/hugo)](https://hub.docker.com/r/hugomods/hugo)
 [![GHCR Pulls](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/ipitio/ghcr-pulls/master/index/hugomods/docker/hugo.json&query=downloads&label=ghcr+pulls&style=flat-square)](https://github.com/hugomods/docker/pkgs/container/hugo)
