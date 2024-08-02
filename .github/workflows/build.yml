@@ -389,7 +389,7 @@ jobs:
         if: ${{ steps.needs-build.outputs.build == true && env.BRANCH_NAME == 'main' }}
         uses: docker/login-action@v3
         with:
-          username: ${{ env.IMAGE_OWNER }}
+          username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Login to GitHub Container Registry
