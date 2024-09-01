@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actionstore/ghcr-stats@v1
+      - uses: actionstore/ghcr-stats@v1.0.3
         with:
           owner: hugomods
           repo: docker
