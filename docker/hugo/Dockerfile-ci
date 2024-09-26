@@ -1,14 +1,14 @@
-# syntax = edrevo/dockerfile-plus
-INCLUDE+ ./Dockerfile-builder
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
 
-INCLUDE+ ./snippets/exts
+INCLUDE ./snippets/exts
 
-INCLUDE+ ./snippets/dart-sass
+INCLUDE ./snippets/dart-sass
 
-INCLUDE+ ./snippets/go
+INCLUDE ./snippets/go
 
-INCLUDE+ ./snippets/git
+INCLUDE ./snippets/git
 
-INCLUDE+ ./snippets/ci
+INCLUDE ./snippets/ci
 
-INCLUDE+ ./snippets/common
+INCLUDE ./snippets/common
