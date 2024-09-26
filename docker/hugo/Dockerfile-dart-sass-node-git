@@ -1,14 +1,14 @@
-# syntax = edrevo/dockerfile-plus
-INCLUDE+ ./Dockerfile-builder
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
 
 FROM node:alpine AS node
 
 FROM alpine:edge
 
-INCLUDE+ ./snippets/node
+INCLUDE ./snippets/node
 
-INCLUDE+ ./snippets/git
+INCLUDE ./snippets/git
 
-INCLUDE+ ./snippets/dart-sass
+INCLUDE ./snippets/dart-sass
 
-INCLUDE+ ./snippets/common
+INCLUDE ./snippets/common

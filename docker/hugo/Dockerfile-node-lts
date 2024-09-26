@@ -1,6 +1,6 @@
-# syntax = edrevo/dockerfile-plus
-INCLUDE+ ./Dockerfile-builder
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
 
 FROM node:lts-alpine
 
-INCLUDE+ ./snippets/common
+INCLUDE ./snippets/common

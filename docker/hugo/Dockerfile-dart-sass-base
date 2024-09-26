@@ -1,8 +1,8 @@
-# syntax = edrevo/dockerfile-plus
-INCLUDE+ ./Dockerfile-builder
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
 
 FROM alpine:edge
 
-INCLUDE+ ./snippets/common
+INCLUDE ./snippets/common
 
-INCLUDE+ ./snippets/dart-sass
+INCLUDE ./snippets/dart-sass
