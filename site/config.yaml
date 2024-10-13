@@ -1,5 +1,6 @@
 baseURL: 'http://example.org/'
 languageCode: en-us
+timeZone: America/Los_Angeles
 title: Hugo Example Site
 cascade:
   - _target:
