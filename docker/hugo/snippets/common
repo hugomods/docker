@@ -3,7 +3,7 @@ ARG HUGO_EXTENDED=
 # libc6-compat & libstdc++ are required for extended SASS libraries
 RUN if [[ -n "$HUGO_EXTENDED" ]]; then apk add --no-cache libc6-compat libstdc++; fi
 
-RUN apk add --update --no-cache ca-certificates
+RUN apk add --update --no-cache ca-certificates tzdata
 
 # copy Hugo binary from builder.
 COPY --from=builder /usr/bin/hugo /usr/bin/hugo
