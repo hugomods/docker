@@ -11,8 +11,5 @@ COPY --from=builder /usr/bin/hugo /usr/bin/hugo
 # copy command aliases
 COPY ./bin /usr/local/bin
 
-# working directory.
-WORKDIR /src
-
 # default command.
 CMD hugo env

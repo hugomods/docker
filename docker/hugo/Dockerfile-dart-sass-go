@@ -8,3 +8,5 @@ INCLUDE ./snippets/common
 INCLUDE ./snippets/dart-sass
 
 INCLUDE ./snippets/go
+
+INCLUDE ./snippets/user
