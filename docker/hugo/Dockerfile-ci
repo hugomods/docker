@@ -12,3 +12,5 @@ INCLUDE ./snippets/git
 INCLUDE ./snippets/ci
 
 INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

@@ -6,3 +6,5 @@ FROM node:alpine
 INCLUDE ./snippets/common
 
 INCLUDE ./snippets/git
+
+INCLUDE ./snippets/user

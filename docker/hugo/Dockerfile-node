@@ -4,3 +4,5 @@ INCLUDE ./Dockerfile-builder
 FROM node:alpine
 
 INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

@@ -8,3 +8,5 @@ INCLUDE ./snippets/go
 INCLUDE ./snippets/git
 
 INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

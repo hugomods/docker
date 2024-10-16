@@ -10,3 +10,5 @@ INCLUDE ./snippets/node
 INCLUDE ./snippets/dart-sass
 
 INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

@@ -12,3 +12,5 @@ INCLUDE ./snippets/git
 INCLUDE ./snippets/dart-sass
 
 INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user
