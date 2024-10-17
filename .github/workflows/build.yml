@@ -329,6 +329,15 @@ jobs:
             echo "Expected working directory \"/src\", got \"$TEST_PWD\"." && exit 1;
           fi
 
+      - name: Check /src ownership
+        if: steps.needs-build.outputs.build == true
+        run: |
+          SRC_OWNER=$(docker run --rm hugomods/hugo:test stat -c "%U:%G" /src)
+          if [[ "$SRC_OWNER" != "hugo:hugo" ]];
+          then
+            echo "Expected the owner of \"/src\" to be "hugo:hugo", got \"$SRC_OWNER\"." && exit 1;
+          fi
+
       - name: Check default user
         if: steps.needs-build.outputs.build == true
         run: |
