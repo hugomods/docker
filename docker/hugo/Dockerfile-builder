@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 
 # build Hugo.
 COPY . .
-RUN --mount=type=cache,target=/root/.cache/go-build \
+RUN --mount=type=cache,target=/root/.cache/go-build,id=go-build-$TARGETOS-$TARGETARCH \
   --mount=type=cache,target=/go/pkg \
   if [[ -z "$HUGO_EXTENDED" ]]; \
   then \
