@@ -1,5 +1,5 @@
 # syntax = devthefuture/dockerfile-x
-INCLUDE ./Dockerfile-builder
+INCLUDE ./snippets/builder
 
 INCLUDE ./snippets/exts
 

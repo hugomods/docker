@@ -1,32 +1,39 @@
-FROM golang:alpine as builder
+FROM --platform=$BUILDPLATFORM tonistiigi/xx:1.5.0 AS xx
 
+FROM --platform=$BUILDPLATFORM golang:alpine AS builder
+
+RUN apk add clang lld
+
+COPY --from=xx / /
+
+ARG TARGETPLATFORM
 ARG HUGO_VERSION
-ARG HUGO_EXTENDED
+ARG HUGO_BUILD_TAGS
 ARG GOPROXY
-ARG TARGETOS
-ARG TARGETARCH
 ARG LDFLAGS
-ENV GOOS=$TARGETOS
-ENV GOARCH=$TARGETARCH
+
+ENV CGO_ENABLED=1
 
 # install build tools.
-RUN apk add --no-cache gcc g++ musl-dev git
+RUN xx-apk add --no-cache gcc g++ musl-dev
 
-WORKDIR /src
+COPY src/go.mod src/go.sum .
 
-# download modules.
+RUN --mount=type=cache,target=/go/pkg,id=go-pkg-$TARGETPLATFORM \
+  xx-go mod download
+
 COPY src .
-RUN --mount=type=cache,target=/root/.cache/go-build \
-  --mount=type=cache,target=/go/pkg \
-  go mod download
-
-# build Hugo.
-COPY . .
-RUN --mount=type=cache,target=/root/.cache/go-build \
-  --mount=type=cache,target=/go/pkg \
-  if [[ -z "$HUGO_EXTENDED" ]]; \
+RUN --mount=type=cache,target=/go/pkg,id=go-pkg-$TARGETPLATFORM \
+  --mount=type=cache,target=/root/.cache/go-build,id=go-build-$TARGETPLATFORM \
+  if [[ -z "$HUGO_BUILD_TAGS" ]]; \
   then \
-    go build -ldflags="$LDFLAGS" -o /usr/bin/hugo; \
+    xx-go build -ldflags="$LDFLAGS" -o /usr/bin/hugo; \
   else \
-    go build -ldflags="$LDFLAGS" -tags extended -o /usr/bin/hugo; \
+    xx-go build -ldflags="$LDFLAGS" -tags $HUGO_BUILD_TAGS -o /usr/bin/hugo; \
   fi
+
+RUN xx-verify /usr/bin/hugo
+
+FROM alpine
+
+COPY --from=builder /usr/bin/hugo /usr/bin/hugo
