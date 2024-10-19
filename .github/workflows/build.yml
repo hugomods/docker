@@ -474,26 +474,11 @@ jobs:
           fi \
           >> $GITHUB_OUTPUT;
 
-      - name: Print image tags
-        if: ${{ steps.needs-build.outputs.build == true }}
-        run: |
-          cat << EOF
-          ${{
-            (matrix.version == 'std-' && matrix.prefix != '') &&
-            format(
-              '{0}{1}',
-              format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version, steps.user-tag.outputs.suffix),
-              format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, 'reg-', steps.user-tag.outputs.suffix)
-            ) ||
-            format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version, steps.user-tag.outputs.suffix)
-          }}
-          EOF
-
       - name: Build and push
-        if: ${{ steps.needs-build.outputs.build == true && env.BRANCH_NAME == 'main' }}
+        if: steps.needs-build.outputs.build == true
         uses: docker/build-push-action@v5
         with:
-          push: true
+          push: ${{ env.BRANCH_NAME == 'main' }}
           context: docker/hugo
           platforms: ${{ env.PLATFORMS }}
           file: docker/hugo/${{ matrix.dockerfile }}
