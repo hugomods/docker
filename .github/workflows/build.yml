@@ -407,7 +407,7 @@ jobs:
           git commit -m 'Test commit' && 
           hugo --enableGitInfo"
 
-      - name: Check Hugo server alias
+      - name: Check Hugo server binding
         if: steps.needs-build.outputs.build == true
         run: >-
           HUGO_SERVER_OUTPUT=$(docker run --rm -v $PWD/site:/src hugomods/hugo:test sh -c "server > server.out & sleep 5 && cat server.out") &&

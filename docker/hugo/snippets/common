@@ -8,8 +8,10 @@ RUN apk add --update --no-cache ca-certificates tzdata
 # copy Hugo binary from builder.
 COPY --from=builder /usr/bin/hugo /usr/bin/hugo
 
-# copy command aliases
+# copy binaries
 COPY ./bin /usr/local/bin
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 # default command.
 CMD hugo env
