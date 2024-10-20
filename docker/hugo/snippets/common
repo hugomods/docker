@@ -14,4 +14,4 @@ COPY ./bin /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # default command.
-CMD hugo env
+CMD hugo help
