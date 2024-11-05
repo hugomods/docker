@@ -8,7 +8,7 @@ COPY --from=xx / /
 
 ARG TARGETPLATFORM
 ARG HUGO_VERSION
-ARG HUGO_EXTENDED
+ARG BUILD_TAGS
 ARG GOPROXY
 ARG TARGETOS
 ARG TARGETARCH
@@ -30,11 +30,11 @@ RUN --mount=type=cache,target=/go/pkg \
 COPY src .
 RUN --mount=type=cache,target=/go/pkg \
   --mount=type=cache,target=/root/.cache/go-build,id=go-pkg-$TARGETPLATFORM \
-  if [[ -z "$HUGO_EXTENDED" ]]; \
+  if [[ -z "$BUILD_TAGS" ]]; \
   then \
     xx-go build -ldflags="$LDFLAGS" -o /usr/bin/hugo; \
   else \
-    xx-go build -ldflags="$LDFLAGS" -tags extended -o /usr/bin/hugo; \
+    xx-go build -ldflags="$LDFLAGS" -tags $BUILD_TAGS -o /usr/bin/hugo; \
   fi
 
 FROM golang:alpine as builder
