@@ -53,9 +53,6 @@ jobs:
         #   3: standard (std-) or extended (empty string) indicator.
         #   4: root user (empty string) or non-root user indicator.
         include:
-          # Set `extended` as true while building extended version of Hugo.
-          - version: ''
-            extended: true
           - version: ''
             prefix: ''
             user: 'root'
@@ -198,6 +195,15 @@ jobs:
               {0}/{1}:{3}exts{4}-{2}
               ghcr.io/{0}/{1}:{3}exts{4}
               ghcr.io/{0}/{1}:{3}exts{4}-{2}
+          # build tags
+          - version: ''
+            build_tags: 'extended'
+          - version: ''
+            prefix: 'ci-'
+            build_tags: 'extended,withdeploy'
+          - version: 'std-'
+            prefix: 'ci-'
+            build_tags: 'withdeploy'
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.issue.number == 3 }}
     steps:
@@ -285,7 +291,7 @@ jobs:
           build-args: |
             LDFLAGS=${{ steps.ldflags.outputs.flags }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
-            HUGO_EXTENDED=${{ matrix.extended }}
+            BUILD_TAGS=${{ matrix.build_tags }}
             USER=${{ matrix.user }}
 
       - id: hugo-version
@@ -445,7 +451,8 @@ jobs:
         run: >-
           docker run --rm
           hugomods/hugo:test
-          sh -c "curl --version &&
+          sh -c "hugo deploy -h &&
+          curl --version &&
           jq --version &&
           htmlproofer -v"
 
@@ -498,5 +505,5 @@ jobs:
           build-args: |
             LDFLAGS=${{ steps.ldflags.outputs.flags }}
             HUGO_VERSION=v${{ steps.release.outputs.version }}
-            HUGO_EXTENDED=${{ matrix.extended }}
+            BUILD_TAGS=${{ matrix.build_tags }}
             USER=${{ matrix.user }}
