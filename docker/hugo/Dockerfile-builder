@@ -37,6 +37,16 @@ RUN --mount=type=cache,target=/go/pkg \
     xx-go build -ldflags="$LDFLAGS" -tags $BUILD_TAGS -o /usr/bin/hugo; \
   fi
 
+FROM alpine as dart-sass
+
+ARG TARGETARCH
+
+RUN apk add jq curl
+RUN curl -s https://api.github.com/repos/sass/dart-sass/releases/latest | \
+    jq -r --arg REGEXP "^.+-linux-${TARGETARCH/amd64/x64}-musl.tar.gz$" '.assets[].browser_download_url | match($REGEXP) | .string' | \
+    xargs -n1 curl -L -o dart-sass.tar.gz
+RUN tar -C /opt -xzf dart-sass.tar.gz
+
 FROM golang:alpine as builder
 
 COPY --from=gobuild /usr/bin/hugo /usr/bin/hugo
