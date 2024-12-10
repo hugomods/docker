@@ -10,3 +10,6 @@ RUN gem install html-proofer --bindir /usr/local/bin
 
 # clean up
 RUN apk --purge del build-base make ruby-dev
+
+# require by Node.js
+RUN apk add --no-cache libstdc++

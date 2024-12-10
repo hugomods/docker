@@ -3,7 +3,7 @@ INCLUDE ./Dockerfile-builder
 
 FROM node:alpine AS node
 
-FROM alpine:edge
+FROM alpine
 
 INCLUDE ./snippets/node
 

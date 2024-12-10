@@ -1,7 +1,7 @@
 # syntax = devthefuture/dockerfile-x
 INCLUDE ./Dockerfile-builder
 
-FROM alpine:edge
+FROM alpine
 
 INCLUDE ./snippets/common
 
