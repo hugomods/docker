@@ -290,7 +290,6 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             LDFLAGS=${{ steps.ldflags.outputs.flags }}
-            HUGO_VERSION=v${{ steps.release.outputs.version }}
             BUILD_TAGS=${{ matrix.build_tags }}
             USER=${{ matrix.user }}
 
@@ -504,6 +503,5 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             LDFLAGS=${{ steps.ldflags.outputs.flags }}
-            HUGO_VERSION=v${{ steps.release.outputs.version }}
             BUILD_TAGS=${{ matrix.build_tags }}
             USER=${{ matrix.user }}
