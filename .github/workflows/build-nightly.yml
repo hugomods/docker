@@ -82,8 +82,8 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           file: docker/hugo/Dockerfile-ci
           tags: |
-            hugomods/hugo:nightly${{ matrix.user == 'root' && '' || '-non-root' }}
-            ghcr.io/hugomods/hugo:nightly${{ matrix.user == 'root' && '' || '-non-root' }}
+            hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
+            ghcr.io/hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
