@@ -1,0 +1,92 @@
+name: build-nightly
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-nightly.yml'
+      - 'docker/hugo/**'
+
+env:
+  PLATFORMS: linux/amd64,linux/arm64
+  IMAGE_OWNER: hugomods
+  IMAGE_NAME: hugo
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build-and-push-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        user: ['root', 'hugo'] # default container user.
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the main repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Checkout the Hugo repository for building.
+      - name: Checkout Hugo repository
+        uses: actions/checkout@v4
+        with:
+          repository: gohugoio/hugo
+          path: ./docker/hugo/src
+
+      - name: Build meta
+        id: build_meta
+        run: |
+          echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+          cd ./docker/hugo/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: LDFLAGS
+        id: ldflags
+        run: |
+          HASH='github.com/gohugoio/hugo/common/hugo.commitHash=${{ steps.build_meta.outputs.hash }}'
+          BUILD_DATE='github.com/gohugoio/hugo/common/hugo.buildDate=${{ steps.build_meta.outputs.date }}'
+          VENDOR='github.com/gohugoio/hugo/common/hugo.vendorInfo=hugomods'
+          echo "-X '$HASH' -X '$BUILD_DATE' -X '$VENDOR'"
+          echo "flags=-X '$HASH' -X '$BUILD_DATE' -X '$VENDOR'">> $GITHUB_OUTPUT
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ env.PLATFORMS }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: ${{ env.PLATFORMS }}
+
+      - name: Login to Docker Hub
+        if: ${{ env.BRANCH_NAME == 'main' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Login to GitHub Container Registry
+        if: ${{ env.BRANCH_NAME == 'main' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ env.IMAGE_OWNER }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: ${{ env.BRANCH_NAME == 'main' }}
+          context: docker/hugo
+          platforms: ${{ env.PLATFORMS }}
+          file: docker/hugo/Dockerfile-ci
+          tags: |
+            hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
+            ghcr.io/hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            LDFLAGS=${{ steps.ldflags.outputs.flags }}
+            BUILD_TAGS=extended,withdeploy
+            USER=${{ matrix.user }}
