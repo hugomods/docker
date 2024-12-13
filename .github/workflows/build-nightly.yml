@@ -17,6 +17,10 @@ env:
 
 jobs:
   build-and-push-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        user: ['root', 'hugo'] # default container user.
     runs-on: ubuntu-latest
     steps:
       # Checkout the main repository.
@@ -78,11 +82,11 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           file: docker/hugo/Dockerfile-ci
           tags: |
-            hugomods/hugo:nightly
-            ghcr.io/hugomods/hugo:nightly
+            hugomods/hugo:nightly${{ matrix.user == 'root' && '' || '-non-root' }}
+            ghcr.io/hugomods/hugo:nightly${{ matrix.user == 'root' && '' || '-non-root' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             LDFLAGS=${{ steps.ldflags.outputs.flags }}
             BUILD_TAGS=extended,withdeploy
-            USER=root
+            USER=${{ matrix.user }}
