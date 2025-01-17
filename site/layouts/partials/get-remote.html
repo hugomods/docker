@@ -1,5 +1,10 @@
 {{ $api := "https://api.github.com" }}
-{{ $resp := resources.GetRemote $api }}
-{{ if not $resp }}
-  {{ errorf "failed to get remote: %s" $api }}
+{{ with try (resources.GetRemote $api) }}
+  {{ with .Err }}
+    {{ errorf "failed to get remote %s: %s." $api . }}
+  {{ else }}
+    {{ if not .Value }}
+      {{ errorf "failed to get remote: %s" $api }}
+    {{ end }}
+  {{ end }}
 {{ end }}
