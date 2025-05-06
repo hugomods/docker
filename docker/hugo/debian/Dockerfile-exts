@@ -1,0 +1,14 @@
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
+
+INCLUDE ./snippets/exts
+
+INCLUDE ./snippets/dart-sass
+
+INCLUDE ./snippets/go
+
+INCLUDE ./snippets/git
+
+INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

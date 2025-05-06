@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+set -- docker-entrypoint.sh hugo server "$@"
+
+exec "$@"

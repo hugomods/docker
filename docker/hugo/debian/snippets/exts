@@ -1,0 +1,15 @@
+FROM node as node
+
+FROM debian:stable-slim
+
+INCLUDE ./node
+
+RUN apt update
+
+# install extra Markdown handlers
+RUN apt install -y \
+  asciidoctor \
+  pandoc
+
+# install Node.js packages.
+RUN npm i -g postcss-cli autoprefixer @fullhuman/postcss-purgecss rtlcss

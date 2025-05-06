@@ -1,0 +1,5 @@
+# install html-proofer
+RUN apt install -y \
+    curl \
+    jq \
+    ruby-html-proofer

@@ -20,6 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: ['alpine', 'debian'] # operating system.
         user: ['root', 'hugo'] # default container user.
     runs-on: ubuntu-latest
     steps:
@@ -32,13 +33,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: gohugoio/hugo
-          path: ./docker/hugo/src
+          path: ./docker/hugo/${{ matrix.os }}/src
 
       - name: Build meta
         id: build_meta
         run: |
           echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
-          cd ./docker/hugo/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          cd ./docker/hugo/${{ matrix.os }}/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: LDFLAGS
         id: ldflags
@@ -78,12 +79,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: ${{ env.BRANCH_NAME == 'main' }}
-          context: docker/hugo
+          context: docker/hugo/${{ matrix.os }}
           platforms: ${{ env.PLATFORMS }}
-          file: docker/hugo/Dockerfile-ci
+          file: docker/hugo/${{ matrix.os }}/Dockerfile-ci
           tags: |
-            hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
-            ghcr.io/hugomods/hugo:nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
+            hugomods/hugo:${{ matrix.os == 'debian' && 'debian-' || '' }}nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
+            ghcr.io/hugomods/hugo:${{ matrix.os == 'debian' && 'debian-' || '' }}nightly${{ matrix.user == 'hugo' && '-non-root' || '' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
