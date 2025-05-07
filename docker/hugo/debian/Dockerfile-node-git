@@ -1,0 +1,10 @@
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
+
+FROM node:slim
+
+INCLUDE ./snippets/common
+
+INCLUDE ./snippets/git
+
+INCLUDE ./snippets/user

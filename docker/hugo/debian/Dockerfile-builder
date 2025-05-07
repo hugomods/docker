@@ -1,0 +1,52 @@
+# FROM --platform=$BUILDPLATFORM tonistiigi/xx:1.6.1 AS xx
+
+FROM --platform=$BUILDPLATFORM golang:bookworm as gobuild
+
+# COPY --from=xx / /
+
+ARG TARGETPLATFORM
+ARG BUILD_TAGS
+ARG GOPROXY
+ARG TARGETOS
+ARG TARGETARCH
+ARG LDFLAGS
+
+ENV CGO_ENABLED=1
+
+RUN apt update
+
+# install build tools.
+RUN apt install -y gcc g++ git
+
+WORKDIR /src
+
+# download modules.
+COPY src/go.mod src/go.sum .
+RUN --mount=type=cache,target=/go/pkg \
+  go mod download
+
+# build Hugo.
+COPY src .
+RUN --mount=type=cache,target=/go/pkg \
+  --mount=type=cache,target=/root/.cache/go-build,id=go-pkg-$TARGETPLATFORM \
+  if [ -z "$BUILD_TAGS" ]; \
+  then \
+    go build -ldflags="$LDFLAGS" -o /usr/bin/hugo; \
+  else \
+    go build -ldflags="$LDFLAGS" -tags $BUILD_TAGS -o /usr/bin/hugo; \
+  fi
+
+FROM debian:stable-slim as dart-sass
+
+ARG TARGETARCH
+
+RUN apt update
+RUN apt install -y jq curl
+RUN curl -s https://api.github.com/repos/sass/dart-sass/releases/latest | \
+    jq -r --arg REGEXP "^.+-linux-$(echo "$TARGETARCH" | sed 's/amd64/x64/').tar.gz$" '.assets[].browser_download_url | match($REGEXP) | .string' | \
+    xargs -n1 curl -L -o dart-sass.tar.gz
+RUN tar -C /opt -xzf dart-sass.tar.gz
+
+FROM golang:bookworm as builder
+
+COPY --from=gobuild /usr/bin/hugo /usr/bin/hugo

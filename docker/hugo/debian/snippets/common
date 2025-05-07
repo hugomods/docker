@@ -1,0 +1,19 @@
+ARG BUILD_TAGS=
+
+RUN apt update
+
+# libc6-compat & libstdc++ are required for extended SASS libraries
+RUN if [ "$BUILD_TAGS" = *"extended"* ]; then apt install -y libc6-compat libstdc++; fi
+
+RUN apt install -y ca-certificates tzdata
+
+# copy Hugo binary from builder.
+COPY --from=builder /usr/bin/hugo /usr/bin/hugo
+
+# copy binaries
+COPY ./bin /usr/local/bin
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# default command.
+CMD hugo help

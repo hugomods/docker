@@ -1,0 +1,8 @@
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
+
+FROM golang:bookworm
+
+INCLUDE ./snippets/common
+
+INCLUDE ./snippets/user

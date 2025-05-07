@@ -22,11 +22,12 @@ env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  build-and-push-image:
+  build:
     strategy:
       fail-fast: false
       matrix:
-        version: ['', 'std-'] # empty string and `std-` represent extended and standard version of Hugo.
+        os: ['alpine', 'debian'] # operating system.
+        edition: ['', 'std-'] # empty string and `std-` represent extended and standard edition of Hugo respectively.
         user: ['root', 'hugo'] # default container user.
         prefix:
           - ''
@@ -52,9 +53,11 @@ jobs:
         #   2: the Hugo version without leading v.
         #   3: standard (std-) or extended (empty string) indicator.
         #   4: root user (empty string) or non-root user indicator.
+        #   5: OS indicator.
         include:
-          - version: ''
+          - edition: ''
             prefix: ''
+            os: 'alpine'
             user: 'root'
             dockerfile: Dockerfile
             tags: |
@@ -62,146 +65,165 @@ jobs:
               {0}/{1}:{2}
               ghcr.io/{0}/{1}:latest
               ghcr.io/{0}/{1}:{2}
-          - version: ''
+          - edition: ''
             prefix: ''
+            os: 'alpine'
             user: 'hugo'
             dockerfile: Dockerfile
             tags: |
-              {0}/{1}:non-root
-              {0}/{1}:non-root-{2}
-              ghcr.io/{0}/{1}:non-root
-              ghcr.io/{0}/{1}:non-root-{2}
-          - version: 'std-'
+              {0}/{1}:{5}non-root
+              {0}/{1}:{5}non-root-{2}
+              ghcr.io/{0}/{1}:{5}non-root
+              ghcr.io/{0}/{1}:{5}non-root-{2}
+          - edition: ''
+            prefix: ''
+            os: 'debian'
+            dockerfile: Dockerfile
+            tags: |
+              {0}/{1}:debian{4}
+              {0}/{1}:debian{4}-{2}
+              ghcr.io/{0}/{1}:debian{4}
+              ghcr.io/{0}/{1}:debian{4}-{2}
+          - edition: 'std-'
+            prefix: ''
+            os: 'debian'
+            dockerfile: Dockerfile
+            tags: |
+              {0}/{1}:debian-std{4}
+              {0}/{1}:debian-std{4}-{2}
+              ghcr.io/{0}/{1}:debian-std{4}
+              ghcr.io/{0}/{1}:debian-std{4}-{2}
+          - edition: 'std-'
             prefix: ''
             dockerfile: Dockerfile
             tags: |
-              {0}/{1}:std{4}
-              {0}/{1}:std{4}-{2}
-              ghcr.io/{0}/{1}:std{4}
-              ghcr.io/{0}/{1}:std{4}-{2}
-              {0}/{1}:reg{4}
-              {0}/{1}:reg{4}-{2}
-              ghcr.io/{0}/{1}:reg{4}
-              ghcr.io/{0}/{1}:reg{4}-{2}
+              {0}/{1}:{5}std{4}
+              {0}/{1}:{5}std{4}-{2}
+              ghcr.io/{0}/{1}:{5}std{4}
+              ghcr.io/{0}/{1}:{5}std{4}-{2}
+              {0}/{1}:{5}reg{4}
+              {0}/{1}:{5}reg{4}-{2}
+              ghcr.io/{0}/{1}:{5}reg{4}
+              ghcr.io/{0}/{1}:{5}reg{4}-{2}
           - prefix: base-
             dockerfile: Dockerfile-base
             tags: |
-              {0}/{1}:{3}base{4}
-              {0}/{1}:{3}base{4}-{2}
-              ghcr.io/{0}/{1}:{3}base{4}
-              ghcr.io/{0}/{1}:{3}base{4}-{2}
+              {0}/{1}:{5}{3}base{4}
+              {0}/{1}:{5}{3}base{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}base{4}
+              ghcr.io/{0}/{1}:{5}{3}base{4}-{2}
           - prefix: ci-
             dockerfile: Dockerfile-ci
             tags: |
-              {0}/{1}:{3}ci{4}
-              {0}/{1}:{3}ci{4}-{2}
-              ghcr.io/{0}/{1}:{3}ci{4}
-              ghcr.io/{0}/{1}:{3}ci{4}-{2}
+              {0}/{1}:{5}{3}ci{4}
+              {0}/{1}:{5}{3}ci{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}ci{4}
+              ghcr.io/{0}/{1}:{5}{3}ci{4}-{2}
           - prefix: dart-sass-
             dockerfile: Dockerfile-dart-sass
             tags: |
-              {0}/{1}:{3}dart-sass{4}
-              {0}/{1}:{3}dart-sass{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass{4}
-              ghcr.io/{0}/{1}:{3}dart-sass{4}-{2}
+              {0}/{1}:{5}{3}dart-sass{4}
+              {0}/{1}:{5}{3}dart-sass{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass{4}-{2}
           - prefix: dart-sass-base-
             dockerfile: Dockerfile-dart-sass-base
             tags: |
-              {0}/{1}:{3}dart-sass-base{4}
-              {0}/{1}:{3}dart-sass-base{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-base{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-base{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-base{4}
+              {0}/{1}:{5}{3}dart-sass-base{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-base{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-base{4}-{2}
           - prefix: dart-sass-git-
             dockerfile: Dockerfile-dart-sass-git
             tags: |
-              {0}/{1}:{3}dart-sass-git{4}
-              {0}/{1}:{3}dart-sass-git{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-git{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-git{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-git{4}
+              {0}/{1}:{5}{3}dart-sass-git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-git{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-git{4}-{2}
           - prefix: dart-sass-go-
             dockerfile: Dockerfile-dart-sass-go
             tags: |
-              {0}/{1}:{3}dart-sass-go{4}
-              {0}/{1}:{3}dart-sass-go{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-go{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-go{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-go{4}
+              {0}/{1}:{5}{3}dart-sass-go{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-go{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-go{4}-{2}
           - prefix: dart-sass-go-git-
             dockerfile: Dockerfile-dart-sass-go-git
             tags: |
-              {0}/{1}:{3}dart-sass-go-git{4}
-              {0}/{1}:{3}dart-sass-go-git{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-go-git{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-go-git{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-go-git{4}
+              {0}/{1}:{5}{3}dart-sass-go-git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-go-git{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-go-git{4}-{2}
           - prefix: dart-sass-node-
             dockerfile: Dockerfile-dart-sass-node
             tags: |
-              {0}/{1}:{3}dart-sass-node{4}
-              {0}/{1}:{3}dart-sass-node{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-node{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-node{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-node{4}
+              {0}/{1}:{5}{3}dart-sass-node{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-node{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-node{4}-{2}
           - prefix: dart-sass-node-git-
             dockerfile: Dockerfile-dart-sass-node-git
             tags: |
-              {0}/{1}:{3}dart-sass-node-git{4}
-              {0}/{1}:{3}dart-sass-node-git{4}-{2}
-              ghcr.io/{0}/{1}:{3}dart-sass-node-git{4}
-              ghcr.io/{0}/{1}:{3}dart-sass-node-git{4}-{2}
+              {0}/{1}:{5}{3}dart-sass-node-git{4}
+              {0}/{1}:{5}{3}dart-sass-node-git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-node-git{4}
+              ghcr.io/{0}/{1}:{5}{3}dart-sass-node-git{4}-{2}
           - prefix: git-
             dockerfile: Dockerfile-git
             tags: |
-              {0}/{1}:{3}git{4}
-              {0}/{1}:{3}git{4}-{2}
-              ghcr.io/{0}/{1}:{3}git{4}
-              ghcr.io/{0}/{1}:{3}git{4}-{2}
+              {0}/{1}:{5}{3}git{4}
+              {0}/{1}:{5}{3}git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}git{4}
+              ghcr.io/{0}/{1}:{5}{3}git{4}-{2}
           - prefix: go-
             dockerfile: Dockerfile-go
             tags: |
-              {0}/{1}:{3}go{4}
-              {0}/{1}:{3}go{4}-{2}
-              ghcr.io/{0}/{1}:{3}go{4}
-              ghcr.io/{0}/{1}:{3}go{4}-{2}
+              {0}/{1}:{5}{3}go{4}
+              {0}/{1}:{5}{3}go{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}go{4}
+              ghcr.io/{0}/{1}:{5}{3}go{4}-{2}
           - prefix: go-git-
             dockerfile: Dockerfile-go-git
             tags: |
-              {0}/{1}:{3}go-git{4}
-              {0}/{1}:{3}go-git{4}-{2}
-              ghcr.io/{0}/{1}:{3}go-git{4}
-              ghcr.io/{0}/{1}:{3}go-git{4}-{2}
+              {0}/{1}:{5}{3}go-git{4}
+              {0}/{1}:{5}{3}go-git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}go-git{4}
+              ghcr.io/{0}/{1}:{5}{3}go-git{4}-{2}
           - prefix: node-
             dockerfile: Dockerfile-node
             tags: |
-              {0}/{1}:{3}node{4}
-              {0}/{1}:{3}node{4}-{2}
-              ghcr.io/{0}/{1}:{3}node{4}
-              ghcr.io/{0}/{1}:{3}node{4}-{2}
+              {0}/{1}:{5}{3}node{4}
+              {0}/{1}:{5}{3}node{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}node{4}
+              ghcr.io/{0}/{1}:{5}{3}node{4}-{2}
           - prefix: node-git-
             dockerfile: Dockerfile-node-git
             tags: |
-              {0}/{1}:{3}node-git{4}
-              {0}/{1}:{3}node-git{4}-{2}
-              ghcr.io/{0}/{1}:{3}node-git{4}
-              ghcr.io/{0}/{1}:{3}node-git{4}-{2}
+              {0}/{1}:{5}{3}node-git{4}
+              {0}/{1}:{5}{3}node-git{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}node-git{4}
+              ghcr.io/{0}/{1}:{5}{3}node-git{4}-{2}
           - prefix: node-lts-
             dockerfile: Dockerfile-node-lts
             tags: |
-              {0}/{1}:{3}node-lts{4}
-              {0}/{1}:{3}node-lts{4}-{2}
-              ghcr.io/{0}/{1}:{3}node-lts{4}
-              ghcr.io/{0}/{1}:{3}node-lts{4}-{2}
+              {0}/{1}:{5}{3}node-lts{4}
+              {0}/{1}:{5}{3}node-lts{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}node-lts{4}
+              ghcr.io/{0}/{1}:{5}{3}node-lts{4}-{2}
           - prefix: exts-
             dockerfile: Dockerfile-exts
             tags: |
-              {0}/{1}:{3}exts{4}
-              {0}/{1}:{3}exts{4}-{2}
-              ghcr.io/{0}/{1}:{3}exts{4}
-              ghcr.io/{0}/{1}:{3}exts{4}-{2}
+              {0}/{1}:{5}{3}exts{4}
+              {0}/{1}:{5}{3}exts{4}-{2}
+              ghcr.io/{0}/{1}:{5}{3}exts{4}
+              ghcr.io/{0}/{1}:{5}{3}exts{4}-{2}
           # build tags
-          - version: ''
+          - edition: ''
             build_tags: 'extended'
-          - version: ''
+          - edition: ''
             prefix: 'ci-'
             build_tags: 'extended,withdeploy'
-          - version: 'std-'
+          - edition: 'std-'
             prefix: 'ci-'
             build_tags: 'withdeploy'
     runs-on: ubuntu-latest
@@ -214,6 +236,26 @@ jobs:
           owner: gohugoio
           name: hugo
           prefix: v
+    
+      - name: OS tag prefix
+        id: os-tag
+        if: steps.release.outputs.version
+        run: |
+          if [[ ${{ matrix.os }} == "debian" ]]; \
+          then echo "prefix=debian-"; \
+          else echo "prefix="; \
+          fi \
+          >> $GITHUB_OUTPUT; \
+    
+      - name: User tag suffix
+        id: user-tag
+        if: steps.release.outputs.version
+        run: |
+          if [[ ${{ matrix.user }} == "hugo" ]]; \
+          then echo "suffix=-non-root"; \
+          else echo "suffix="; \
+          fi \
+          >> $GITHUB_OUTPUT; \
 
       - name: Check if the image tag exists
         if: steps.release.outputs.version
@@ -222,7 +264,7 @@ jobs:
         with:
           owner: ${{ env.IMAGE_OWNER }}
           name: ${{ env.IMAGE_NAME }}
-          tag: ${{ matrix.version }}${{ matrix.prefix }}${{ steps.release.outputs.version }}
+          tag: ${{ steps.os-tag.outputs.prefix }}${{ matrix.edition }}${{ matrix.prefix }}${{ matrix.user == 'hugo' && 'non-root-' || '' }}${{ steps.release.outputs.version }}
 
       # The `build` is `true` on when the image tag doesn't exist or the commit message contains the word `[build]`.
       - id: needs-build
@@ -247,14 +289,14 @@ jobs:
         with:
           repository: gohugoio/hugo
           ref: v${{ steps.release.outputs.version }}
-          path: ./docker/hugo/src
+          path: ./docker/hugo/${{ matrix.os }}/src
 
       - name: Build meta
         id: build_meta
         if: steps.needs-build.outputs.build == true
         run: |
           echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
-          cd ./docker/hugo/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          cd ./docker/hugo/${{ matrix.os }}/src && echo "hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: LDFLAGS
         id: ldflags
@@ -283,8 +325,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           load: true
-          context: docker/hugo
-          file: docker/hugo/${{ matrix.dockerfile }}
+          context: docker/hugo/${{ matrix.os }}
+          file: docker/hugo/${{ matrix.os }}/${{ matrix.dockerfile }}
           tags: hugomods/hugo:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -309,13 +351,18 @@ jobs:
       - name: Check Hugo edition
         if: steps.needs-build.outputs.build == true
         run: |
-          if [[ "${{ matrix.version }}" == "std-" && "${{ steps.hugo-version.outputs.version }}" == *"extended"* ]];
+          if [[ "${{ matrix.edition }}" == "std-" && "${{ steps.hugo-version.outputs.version }}" == *"extended"* ]];
           then
             echo "Expected standard edition of Hugo, got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
-          elif [[ "${{ matrix.version }}" == "" && "${{ steps.hugo-version.outputs.version }}" != *"extended"* ]]
+          elif [[ "${{ matrix.edition }}" == "" && "${{ steps.hugo-version.outputs.version }}" != *"extended"* ]]
           then
             echo "Expected extended edition of Hugo, got "${{ steps.hugo-version.outputs.version }}"." && exit 1;
           fi
+
+      - name: Check OS
+        if: steps.needs-build.outputs.build == true
+        run: |
+          docker run --rm hugomods/hugo:test sh -c "cat /etc/os-release | grep "${{ matrix.os }}""
 
       - name: Check Vendor Info
         if: steps.needs-build.outputs.build == true
@@ -404,7 +451,7 @@ jobs:
           -v $PWD/site:/src 
           hugomods/hugo:test 
           /bin/sh -c "
-          if [[ "${{ matrix.user }}" == "hugo" ]]; then git config --global --add safe.directory /src; fi &&
+          git config --global --add safe.directory /src &&
           git init && 
           git add -A && 
           git config --global user.email "support@hugomods.com" && 
@@ -469,35 +516,25 @@ jobs:
           registry: ghcr.io
           username: ${{ env.IMAGE_OWNER }}
           password: ${{ secrets.GITHUB_TOKEN }}
-    
-      - name: User tag suffix
-        id: user-tag
-        if: ${{ steps.needs-build.outputs.build == true }}
-        run: |
-          if [[ ${{ matrix.user }} == "hugo" ]]; \
-          then echo "suffix=-non-root"; \
-          else echo "suffix="; \
-          fi \
-          >> $GITHUB_OUTPUT;
 
       - name: Build and push
         if: steps.needs-build.outputs.build == true
         uses: docker/build-push-action@v5
         with:
           push: ${{ env.BRANCH_NAME == 'main' }}
-          context: docker/hugo
+          context: docker/hugo/${{ matrix.os }}
           platforms: ${{ env.PLATFORMS }}
-          file: docker/hugo/${{ matrix.dockerfile }}
+          file: docker/hugo/${{ matrix.os }}/${{ matrix.dockerfile }}
           # Reserve reg* variants for backwards compatibility.
           tags: >
             ${{
-              (matrix.version == 'std-' && matrix.prefix != '') &&
+              (matrix.edition == 'std-' && matrix.prefix != '') &&
               format(
                 '{0}{1}',
-                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version, steps.user-tag.outputs.suffix),
-                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, 'reg-', steps.user-tag.outputs.suffix)
+                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.edition, steps.user-tag.outputs.suffix, steps.os-tag.outputs.prefix),
+                format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, 'reg-', steps.user-tag.outputs.suffix, steps.os-tag.outputs.prefix)
               ) ||
-              format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.version, steps.user-tag.outputs.suffix)
+              format(matrix.tags, env.IMAGE_OWNER, env.IMAGE_NAME, steps.release.outputs.version, matrix.edition, steps.user-tag.outputs.suffix, steps.os-tag.outputs.prefix)
             }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -1,0 +1,12 @@
+# syntax = devthefuture/dockerfile-x
+INCLUDE ./Dockerfile-builder
+
+FROM debian:stable-slim
+
+INCLUDE ./snippets/common
+
+INCLUDE ./snippets/dart-sass
+
+INCLUDE ./snippets/git
+
+INCLUDE ./snippets/user

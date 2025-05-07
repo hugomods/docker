@@ -1,0 +1,15 @@
+ARG USER=root
+
+# delete the node user, separated into two RUN instructions avoid exiting with code 1.
+RUN if id node >/dev/null 2>&1; then deluser node 2> /dev/null; fi
+
+# delete the node group.
+RUN if id node >/dev/null 2>&1; then delgroup node 2> /dev/null; fi
+
+RUN addgroup --gid 1000 hugo && adduser --uid 1000 --gid 1000 --shell /bin/sh --disabled-password hugo
+
+RUN mkdir /src && chown -R hugo:hugo /src
+
+USER ${USER}
+
+WORKDIR /src

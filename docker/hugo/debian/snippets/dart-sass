@@ -1,0 +1,2 @@
+COPY --from=dart-sass /opt/dart-sass /opt/dart-sass
+ENV PATH="$PATH:/opt/dart-sass"
