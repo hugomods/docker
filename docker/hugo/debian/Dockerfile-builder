@@ -1,6 +1,9 @@
+# Can not resolve dependencies conflict, use default cross compile instead.
 # FROM --platform=$BUILDPLATFORM tonistiigi/xx:1.6.1 AS xx
 
-FROM --platform=$BUILDPLATFORM golang:bookworm as gobuild
+# FROM --platform=$BUILDPLATFORM golang:bookworm as gobuild
+
+FROM golang:bookworm as gobuild
 
 # COPY --from=xx / /
 
@@ -11,6 +14,8 @@ ARG TARGETOS
 ARG TARGETARCH
 ARG LDFLAGS
 
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
 ENV CGO_ENABLED=1
 
 RUN apt update
