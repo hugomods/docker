@@ -17,6 +17,7 @@ env:
 
 jobs:
   build-and-push-image:
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
