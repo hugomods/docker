@@ -281,12 +281,12 @@ jobs:
       # Checkout the main repository.
       - name: Checkout repository
         if: steps.needs-build.outputs.build == true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Checkout the Hugo repository for building.
       - name: Checkout Hugo repository
         if: steps.needs-build.outputs.build == true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: gohugoio/hugo
           ref: v${{ steps.release.outputs.version }}
