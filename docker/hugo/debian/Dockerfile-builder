@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/go/pkg \
     go build -ldflags="$LDFLAGS" -tags $BUILD_TAGS -o /usr/bin/hugo; \
   fi
 
-FROM debian:stable-slim as dart-sass
+FROM debian:bookworm-slim as dart-sass
 
 ARG TARGETARCH
 

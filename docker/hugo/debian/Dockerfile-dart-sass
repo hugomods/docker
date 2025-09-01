@@ -3,7 +3,7 @@ INCLUDE ./Dockerfile-builder
 
 FROM node AS node
 
-FROM debian:stable-slim
+FROM debian:bookworm-slim
 
 INCLUDE ./snippets/node
 

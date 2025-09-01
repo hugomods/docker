@@ -1,6 +1,6 @@
 FROM node as node
 
-FROM debian:stable-slim
+FROM debian:bookworm-slim
 
 INCLUDE ./node
 
