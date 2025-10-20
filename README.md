@@ -8,3 +8,5 @@
 **Please note that we've renamed `razonyang/hugo` to `hugomods/hugo`, the former will no longer be updated.**
 
 Please checkout the [documentation](https://docker.hugomods.com/) for details.
+
+BTW, there is now an official Docker image available on [ghcr.io/gohugoio/hugo](https://github.com/gohugoio/hugo/pkgs/container/hugo).
