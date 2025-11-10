@@ -27,11 +27,11 @@ jobs:
     steps:
       # Checkout the main repository.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Checkout the Hugo repository for building.
       - name: Checkout Hugo repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: gohugoio/hugo
           path: ./docker/hugo/${{ matrix.os }}/src
