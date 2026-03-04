@@ -52,7 +52,7 @@ jobs:
           echo "flags=-X '$HASH' -X '$BUILD_DATE' -X '$VENDOR'">> $GITHUB_OUTPUT
       
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: ${{ env.PLATFORMS }}
 
