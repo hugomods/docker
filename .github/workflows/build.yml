@@ -323,7 +323,7 @@ jobs:
 
       - name: Build and export to Docker
         if: steps.needs-build.outputs.build == true
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           load: true
           context: docker/hugo/${{ matrix.os }}
@@ -521,7 +521,7 @@ jobs:
 
       - name: Build and push
         if: steps.needs-build.outputs.build == true
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           push: ${{ env.BRANCH_NAME == 'main' }}
           context: docker/hugo/${{ matrix.os }}
